@@ -97,6 +97,20 @@ void Hunter(GameView gv, qlist q, char *plays, PlayerID player)
 		push(q,ST_JOSEPH_AND_ST_MARYS);
     }
 }
+
+void newGame(GameView gv)
+{
+	gv->round = 0;
+	gv->score = GAME_START_SCORE;
+	int i = 0;
+	while (i < NUM_PLAYERS-1){
+		gv->healthPoints[i] = GAME_START_HUNTER_LIFE_POINTS;
+		gv->playerLocations[i++][0] = UNKNOWN_LOCATION;
+	}
+	gv->healthPoints[i] = GAME_START_BLOOD_POINTS;
+	gv->playerLocations[i][0] = UNKNOWN_LOCATION;
+}
+
 // Creates a new GameView to summarise the current state of the game
 GameView newGameView(char *pastPlays, PlayerMessage messages[])
 {
