@@ -13,6 +13,7 @@ typedef struct gameView {
    int healthPoints[NUM_PLAYERS];   
    LocationID playerLocations[NUM_PLAYERS][TRAIL_SIZE];
 }gameView;
+
 typedef struct node{
    LocationID playerloc;
    struct node *next;
@@ -26,48 +27,82 @@ typedef struct queue{
 
 qlist init()
 {
-   qlist newq = malloc(sizeof(queue));
-   newq->head = newq->tail = NULL;
-   newq->size = 0;
-   return newq;
+    qlist newq = malloc(sizeof(queue));
+    newq->head = newq->tail = NULL;
+    newq->size = 0;
+    return newq;
+}
+
+int isEmpty(qlist q)
+{
+    return q->size;
 }
 
 LocationID pop(qlist q)
 {
-   LocationID dest = q->head->playerloc;
-   node *todel = q->head;
-   if (!q->head)return -1;
-   if (q->head == q->tail){
-      q->head = q->tail = NULL;
-   } else {
-      q->head = q->head->next;
-   }
-   free(todel);
-   q->size--;
-   return dest;
+    LocationID dest = q->head->playerloc;
+    node *todel = q->head;
+    if (!q->head)return -1;
+    if (q->head == q->tail){
+       q->head = q->tail = NULL;
+    } else {
+       q->head = q->head->next;
+    }
+    free(todel);
+    q->size--;
+    return dest;
+}
+
+LocationID peek(qlist q)
+{
+	if(q->tail == NULL)return -1;
+	return q->tail->playerloc;
 }
 
 void push(qlist q,LocationID it)
 {
-   node *n = malloc(sizeof(node));
-   n->playerloc = it; n->next = NULL;
-   if (q->size == 0){
-      q->head = q->tail = n;
-      q->size++;
-   } else if(q->size == TRAIL_SIZE) {
-      pop(q);
-      q->tail->next = n;
-   } else{
-      q->tail->next = n;
-      q->size++;
-   }
+    node *n = malloc(sizeof(node));
+    n->playerloc = it; n->next = NULL;
+    if (q->size == 0){
+       q->head = q->tail = n;
+       q->size++;
+    } else if(q->size == TRAIL_SIZE) {
+       pop(q);
+       q->tail->next = n;
+    } else{
+       q->tail->next = n;
+       q->size++;
+    }
 }
 
+//records the action of hunter "player" in one particular turn
+void Hunter(GameView gv, qlist q, char *plays, PlayerID player)
+{
+	LocationID prevloc = peek(q);
+    LocationID currloc = abbrevToID(plays+1);
+	push(q,currloc);
+    if(prevloc == currloc && gv->healthPoints[player] < 9){
+		gv->healthPoints[player] += 3;
+		if(gv->healthPoints > 9)gv->healthPoints = 9;
+	}
+    if(plays[3] == 'T')gv->healthPoints[player]-=2;
+    if(plays[4] == 'V');//to be decided
+    if(plays[5] == 'D'){
+		gv->healthPoints[PLAYER_DRACULAR] -= 10;
+ 		gv->healthPoints[player] -= 4;
+	}
+
+	if(gv->healthPoints[player] <= 0){
+		gv->healthPoints[player] = 9;
+		push(q,ST_JOSEPH_AND_ST_MARYS);
+    }
+}
 // Creates a new GameView to summarise the current state of the game
 GameView newGameView(char *pastPlays, PlayerMessage messages[])
 {
-    GameView gameView = malloc(sizeof(struct gameView));
-    gameView->round = strlen(pastPlays);
+    GameView gv = malloc(sizeof(struct gameView));
+    newGame(gv);
+	gv->round = strlen(pastPlays);
     
     /* pastPlays is a string which summarises ALL previous plays in the game.
      * Each play is 7 character:
