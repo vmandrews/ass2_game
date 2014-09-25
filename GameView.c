@@ -8,6 +8,7 @@
 #include "Game.h"
 #include "GameView.h"
 #include "Map.h" //... if you decide to use the Map ADT
+
 typedef struct gameView {
    int round;
    int score;
@@ -109,16 +110,19 @@ void Hunter(GameView gv, qlist q, char *plays, PlayerID player)
 void Dracula(GameView gv,qlist q,char *play,PlayerID player)
 {
     if(play[1] == 'H' && play[2] == 'I'){
-        //DO HIDE
+        push(q,HIDE);
     }else if(play[1] == 'D' && isdigit(play[2])){
-        LocationID currloc = peek(q,play[2]-'0');
-        push(q,currloc);
-    }else if(play[1] == 'T' && play[2] == 'P'){
-         push(q,CASTLE_DRACULA);
+    	push(q,102+(play[2]-'0'));
+	}else if(play[1] == 'T' && play[2] == 'P'){
+        push(q,TELEPORT);
         gv->healthPoints[PLAYER_DRACULA] += LIFE_GAIN_CASTLE_DRACULA;    
-    }else{
-        push(q,abbrevToID(play+1));
-    }
+    }else if(play[1] == 'C' && play[2] == '?'){
+        push(q,CITY_UNKOWN);
+    }else if(play[1] == 'S' && play[2] == '?'){
+		push(q,SEA_UNKNOWN);
+	}else{
+		push(q,abbrevToID(plays+1));
+	}
 
     if(play[3] == 'T'){
         ;//TO BE DECIDED
