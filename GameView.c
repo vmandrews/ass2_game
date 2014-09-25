@@ -8,59 +8,59 @@
 #include "Map.h" //... if you decide to use the Map ADT
      
 typedef struct gameView {
-	int round;
-	int score;
-	int healthPoints[NUM_PLAYERS];	
-	LocationID playerLocations[NUM_PLAYERS][TRAIL_SIZE];
+   int round;
+   int score;
+   int healthPoints[NUM_PLAYERS];   
+   LocationID playerLocations[NUM_PLAYERS][TRAIL_SIZE];
 }gameView;
 typedef struct node{
-	LocationID playerloc;
-	struct node *next;
+   LocationID playerloc;
+   struct node *next;
 }node;
 
 typedef struct queue{
-	node *head;
-	node *tail;
-	int size;
+   node *head;
+   node *tail;
+   int size;
 }queue,*qlist;
 
 qlist init()
 {
-	qlist newq = malloc(sizeof(queue));
-	newq->head = newq->tail = NULL;
-	newq->size = 0;
-	return newq;
+   qlist newq = malloc(sizeof(queue));
+   newq->head = newq->tail = NULL;
+   newq->size = 0;
+   return newq;
 }
 
 LocationID pop(qlist q)
 {
-	LocationID dest = q->head->playerloc;
-	node *todel = q->head;
-	if (!q->head)return -1;
-	if (q->head == q->tail){
-		q->head = q->tail = NULL;
-	} else {
-		q->head = q->head->next;
-	}
-	free(todel);
-	q->size--;
-	return dest;
+   LocationID dest = q->head->playerloc;
+   node *todel = q->head;
+   if (!q->head)return -1;
+   if (q->head == q->tail){
+      q->head = q->tail = NULL;
+   } else {
+      q->head = q->head->next;
+   }
+   free(todel);
+   q->size--;
+   return dest;
 }
 
 void push(qlist q,LocationID it)
 {
-	node *n = malloc(sizeof(node));
-	n->playerloc = it; n->next = NULL;
-	if (q->size == 0){
-		q->head = q->tail = n;
-		q->size++;
-	} else if(q->size == TRAIL_SIZE) {
-		pop(q);
-		q->tail->next = n;
-	} else{
-		q->tail->next = n;
-		q->size++;
-	}
+   node *n = malloc(sizeof(node));
+   n->playerloc = it; n->next = NULL;
+   if (q->size == 0){
+      q->head = q->tail = n;
+      q->size++;
+   } else if(q->size == TRAIL_SIZE) {
+      pop(q);
+      q->tail->next = n;
+   } else{
+      q->tail->next = n;
+      q->size++;
+   }
 }
 
 // Creates a new GameView to summarise the current state of the game
