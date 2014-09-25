@@ -7,18 +7,38 @@
 #include "GameView.h"
 // #include "Map.h" ... if you decide to use the Map ADT
      
-struct gameView {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    int hello;
-};
-     
+typedef struct gameView {
+	int round;
+	int score;
+	int healthPoints[NUM_PLAYERS];	
+	LocationID playerLocations[NUM_PLAYERS][TRAIL_SIZE];
+}gameView;
 
 // Creates a new GameView to summarise the current state of the game
 GameView newGameView(char *pastPlays, PlayerMessage messages[])
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
     GameView gameView = malloc(sizeof(struct gameView));
-    gameView->hello = 42;
+    gameView->round = strlen(pastPlays);
+    
+    /* pastPlays is a string which summarises ALL previous plays in the game.
+     * Each play is 7 character:
+     * For hunters: 
+     *      1st letter: G,S,H,M represents the player
+     *      2nd and 3rd letter together is appreviated city name
+     *      Last 4 letters: T for traps, V for Vampire, D for Dracula,      
+     *      or . for the remaining spaces
+     *
+     * For Dracula:
+     *      1st letter: D
+     *      2nd and 3rd Letter: Represents location of Dracula (city, sea etc.)
+     *      4th and 5th Letter: Trap (T) or Vampire (V) placed
+     *      6th Letter: Trap is left (malfunctions - M) or vampire matures (V) or .
+     *      7th Letter: always .
+     * 
+     *
+     * We need to take this string to update the GameView struct i think???
+     */
+    
     return gameView;
 }
      
@@ -36,36 +56,31 @@ void disposeGameView(GameView toBeDeleted)
 // Get the current round
 Round getRound(GameView currentView)
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+     return currentView->round;
 }
 
 // Get the id of current player - ie whose turn is it?
 PlayerID getCurrentPlayer(GameView currentView)
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+    return(getRound(currentView) % NUM_PLAYERS);
 }
 
 // Get the current score
 int getScore(GameView currentView)
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+     return currentView->score;
 }
 
 // Get the current health points for a given player
 int getHealth(GameView currentView, PlayerID player)
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+    return(currentView->healthPoints[player]);
 }
 
 // Get the current location id of a given player
 LocationID getLocation(GameView currentView, PlayerID player)
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+     return currentView->playerLocations[player][0];
 }
 
 //// Functions that return information about the history of the game
@@ -74,7 +89,10 @@ LocationID getLocation(GameView currentView, PlayerID player)
 void getHistory(GameView currentView, PlayerID player,
                             LocationID trail[TRAIL_SIZE])
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+    int i = 0;
+    for(;i < TRAIL_SIZE; i++) {
+        trail[i] = currentView->playerLocations[player][i]; 
+    }
 }
 
 //// Functions that query the map to find information about connectivity
