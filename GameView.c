@@ -2,11 +2,12 @@
 
 #include <stdlib.h>
 #include <assert.h>
+#include <string.h>
+#include <ctype.h>
 #include "Globals.h"
 #include "Game.h"
 #include "GameView.h"
 #include "Map.h" //... if you decide to use the Map ADT
-     
 typedef struct gameView {
    int round;
    int score;
@@ -53,10 +54,15 @@ LocationID pop(qlist q)
     return dest;
 }
 
-LocationID peek(qlist q)
+LocationID peek(qlist q, int n)
 {
-	if(q->tail == NULL)return -1;
-	return q->tail->playerloc;
+    if(q->tail == NULL)return -1;
+    if(n == 1)return q->tail->playerloc;
+
+    int i = 0;
+    node *curr = q->head;
+    for(;i < q->size-n;i++,curr = curr->next);
+    return curr->playerloc;
 }
 
 void push(qlist q,LocationID it)
@@ -78,37 +84,69 @@ void push(qlist q,LocationID it)
 //records the action of hunter "player" in one particular turn
 void Hunter(GameView gv, qlist q, char *plays, PlayerID player)
 {
-	LocationID prevloc = peek(q);
+    LocationID prevloc = peek(q,1);
     LocationID currloc = abbrevToID(plays+1);
-	push(q,currloc);
-    if(prevloc == currloc && gv->healthPoints[player] < 9){
-		gv->healthPoints[player] += 3;
-		if(gv->healthPoints > 9)gv->healthPoints = 9;
-	}
-    if(plays[3] == 'T')gv->healthPoints[player]-=2;
+    push(q,currloc);
+    if(prevloc == currloc && gv->healthPoints[player] < GAME_START_HUNTER_LIFE_POINTS){
+        gv->healthPoints[player] += LIFE_GAIN_REST;
+        if(gv->healthPoints[player] > GAME_START_HUNTER_LIFE_POINTS)
+            gv->healthPoints[player] = GAME_START_HUNTER_LIFE_POINTS;
+    }
+    if(plays[3] == 'T')gv->healthPoints[player]-= LIFE_LOSS_TRAP_ENCOUNTER;
     if(plays[4] == 'V');//to be decided
     if(plays[5] == 'D'){
-		gv->healthPoints[PLAYER_DRACULAR] -= 10;
- 		gv->healthPoints[player] -= 4;
-	}
-
-	if(gv->healthPoints[player] <= 0){
-		gv->healthPoints[player] = 9;
-		push(q,ST_JOSEPH_AND_ST_MARYS);
+        gv->healthPoints[PLAYER_DRACULA] -= LIFE_LOSS_HUNTER_ENCOUNTER;
+        gv->healthPoints[player] -= LIFE_LOSS_DRACULA_ENCOUNTER;
     }
+
+    if(gv->healthPoints[player] <= 0){
+        gv->healthPoints[player] = GAME_START_HUNTER_LIFE_POINTS;
+        push(q,ST_JOSEPH_AND_ST_MARYS);
+        gv->score -= SCORE_LOSS_HUNTER_HOSPITAL;
+    }
+}
+
+void Dracula(GameView gv,qlist q,char *play,PlayerID player)
+{
+    if(play[1] == 'H' && play[2] == 'I'){
+        //DO HIDE
+    }else if(play[1] == 'D' && isdigit(play[2])){
+        LocationID currloc = peek(q,play[2]-'0');
+        push(q,currloc);
+    }else if(play[1] == 'T' && play[2] == 'P'){
+         push(q,CASTLE_DRACULA);
+        gv->healthPoints[PLAYER_DRACULA] += LIFE_GAIN_CASTLE_DRACULA;    
+    }else{
+        push(q,abbrevToID(play+1));
+    }
+
+    if(play[3] == 'T'){
+        ;//TO BE DECIDED
+    }
+
+    if(play[4] == 'V'){
+        ;//TO BE DECIDED
+    }
+
+    if(play[5] == 'M'){
+        ;//TO BE DECIDED
+    }else if(play[5] == 'V'){
+        gv->score -= SCORE_LOSS_VAMPIRE_MATURES;
+    }
+    gv->score -= SCORE_LOSS_DRACULA_TURN;
 }
 
 void newGame(GameView gv)
 {
-	gv->round = 0;
-	gv->score = GAME_START_SCORE;
-	int i = 0;
-	while (i < NUM_PLAYERS-1){
-		gv->healthPoints[i] = GAME_START_HUNTER_LIFE_POINTS;
-		gv->playerLocations[i++][0] = UNKNOWN_LOCATION;
-	}
-	gv->healthPoints[i] = GAME_START_BLOOD_POINTS;
-	gv->playerLocations[i][0] = UNKNOWN_LOCATION;
+    gv->round = 0;
+    gv->score = GAME_START_SCORE;
+    int i = 0;
+    while (i < NUM_PLAYERS-1){
+        gv->healthPoints[i] = GAME_START_HUNTER_LIFE_POINTS;
+        gv->playerLocations[i++][0] = UNKNOWN_LOCATION;
+    }
+    gv->healthPoints[i] = GAME_START_BLOOD_POINTS;
+    gv->playerLocations[i][0] = UNKNOWN_LOCATION;
 }
 
 // Creates a new GameView to summarise the current state of the game
@@ -116,7 +154,7 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
 {
     GameView gv = malloc(sizeof(struct gameView));
     newGame(gv);
-	gv->round = strlen(pastPlays);
+    gv->round = strlen(pastPlays)/8;
     
     /* pastPlays is a string which summarises ALL previous plays in the game.
      * Each play is 7 character:
@@ -137,7 +175,7 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
      * We need to take this string to update the GameView struct i think???
      */
     
-    return gameView;
+    return gv;
 }
      
      
