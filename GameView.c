@@ -194,78 +194,62 @@ void movetrap(qlist q, LocationID place)
     free(curr);
 }
 
+
 //0 = trap, 1 = vampire
 int trapNum(TrapVam tv, LocationID place, int trapType)
 {
-    node *curr = NULL;
-    if (trapType){
-        curr = tv->vam->head;
-    }else{
-        curr = tv->trap->head;
-    }
+	int trapNo = 0;
+	node *curr = NULL;
+	if (trapType){
+		curr = tv->vam->head;
+	}else{
+		curr = tv->trap->head;
+	}
 
-    for (;; curr = curr->next){
-        if (curr->playerloc == place)break;
-    }
-    return curr->trapNum;
+	for (;curr != NULL;curr = curr->next){
+		if (curr->playerloc == place)trapNo++;
+	}
+	return trapNo;
 }
 
 //type indicates if the trap was encountered (so dismissed)
-//or placed (so increment) 0 = encounter, 1 = place
+//or placed (so increment) 0 = encounter, 1 = place,2 = mature
 //traptype 0 = trap,1 = vampire
 void updateTrap(TrapVam tv,LocationID place,int type)
 {
-    if (type){
-        node *loc = tv->trap->head;
-        for (; loc != NULL; loc = loc->next){
-            if (loc->playerloc == place)break;
-        }
-
-        if (loc){
-            loc->trapNum++;
-        } else{
-            node *newtrap = malloc(sizeof(node));
-            newtrap->playerloc = place;
-            newtrap->trapNum = 1;
-            newtrap->next = newtrap->prev = NULL;
-            pushtrap(tv->trap, newtrap);
-        }
-    } else{
-        movetrap(tv->trap, place);
-    }
+	if (type == 0){
+		int traps = trapNum(tv, place, 0), i = 0;
+		for (; i < traps; i++){
+			movetrap(tv->trap, place);
+		}
+	} else if (type == 1){
+		node *newt = malloc(sizeof(node));
+		newt->next = newt->prev = NULL;
+		newt->playerloc = place;
+		pushtrap(tv->trap, newt);
+	} else{
+		pop(tv->trap);
+	}
 }
 
 //type 0 = hunter encounter, 1 = vampire place, 2 = vampire mature
 void updateVam(TrapVam tv, LocationID place, int type)
 {
-    if (type == 1){
-        node *loc = tv->vam->head;
-        for (; loc != NULL; loc = loc->next){
-            if (loc->playerloc == place)break;
-        }
-
-        if (loc){
-            loc->trapNum++;
-        } else{
-            node *newtrap = malloc(sizeof(node));
-            newtrap->playerloc = place;
-            newtrap->trapNum = 1;
-            newtrap->next = newtrap->prev = NULL;
-            pushtrap(tv->vam, newtrap);
-        }
-    } else if(type == 2){
-        if (trapNum(tv, place, 1) <= 1){
-            movetrap(tv->vam, place);
-        } else{
-            node *oldvam = tv->vam->head;
-            for (;; oldvam = oldvam->next)
-            if (oldvam->playerloc == place)break;
-            oldvam->trapNum--;
-        }
-    } else{
-        movetrap(tv->vam, place);
-    }
+	if (type == 0){
+		int traps = trapNum(tv, place, 1), i = 0;
+		for (; i < traps; i++){
+			movetrap(tv->vam, place);
+		}
+	} else if (type == 1){
+		node *newt = malloc(sizeof(node));
+		newt->next = newt->prev = NULL;
+		newt->playerloc = place;
+		pushtrap(tv->vam, newt);
+	} else{
+		pop(tv->vam);
+	}
 }
+
 
 void freeTravm(TrapVam ts)
 {
@@ -374,7 +358,7 @@ void Dracula(GameView gv, qlist q, char *play, TrapVam tpvs)
     }
 
     if (play[5] == 'M'){
-        updateTrap(tpvs, currlocation, 0);
+        updateTrap(tpvs, currlocation, 2);
     } else if (play[5] == 'V'){
         gv->score -= SCORE_LOSS_VAMPIRE_MATURES;
         updateVam(tpvs, currlocation, 2);
