@@ -112,7 +112,7 @@ void push(qlist q, LocationID it)
     q->tail = n;
     q->size++;
 }
-
+#if(0)
 void testQueue()
 {
     qlist q[4];
@@ -152,6 +152,7 @@ void testQueue()
     assert(peek(q[0], 4) == 3);
     assert(peek(q[0], 5) == 1);
 }
+#endif
 //============================================================= Q ends Here ================================================//
 //==========================================================================================================================//
 
@@ -197,9 +198,9 @@ int trapNum(TrapVam tv, LocationID place, int trapType)
 {
     node *curr = NULL;
     if (trapType){
-        node *curr = tv->vam->head;
+        curr = tv->vam->head;
     }else{
-        node *curr = tv->trap->head;
+        curr = tv->trap->head;
     }
 
     for (;; curr = curr->next){
@@ -367,7 +368,7 @@ void newGame(GameView gv,qlist q[])
         push(q[i++],UNKNOWN_LOCATION);
     }
     gv->
-
+}
      
      
 // Frees all memory previously allocated for the GameView toBeDeleted
