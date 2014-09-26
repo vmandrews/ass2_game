@@ -12,138 +12,138 @@
 #define TURN_LEN 8
 
 typedef struct gameView {
-	int round;
-	int score; 
-	int healthPoints[NUM_PLAYERS];
-	LocationID playerLocations[NUM_PLAYERS][TRAIL_SIZE];
+    int round;
+    int score; 
+    int healthPoints[NUM_PLAYERS];
+    LocationID playerLocations[NUM_PLAYERS][TRAIL_SIZE];
 }gameView;
 
 //=================================================================================================================//
 //==================================================== Q used for trail ===========================================//
 
 typedef struct node{
-	LocationID playerloc;
-	struct node *next;
-	struct node *prev;
+    LocationID playerloc;
+    struct node *next;
+    struct node *prev;
 }node;
 
 typedef struct queue{
-	node *head;
-	node *tail;
-	int size;
+    node *head;
+    node *tail;
+    int size;
 }queue, *qlist;
 
 qlist init()
 {
-	qlist newq = malloc(sizeof(queue));
-	newq->head = newq->tail = NULL;
-	newq->size = 0;
-	return newq;
+    qlist newq = malloc(sizeof(queue));
+    newq->head = newq->tail = NULL;
+    newq->size = 0;
+    return newq;
 }
 
 int isEmpty(qlist q)
 {
-	return !q->size;
+    return !q->size;
 }
 
 LocationID spop(qlist q)
 {
-	LocationID dest = q->tail->playerloc;
-	node *todel = q->tail;
-	if (!todel)return -2;
-	if (q->head == q->tail)q->head = q->tail = NULL;
-	else {
-		q->tail = q->tail->prev;
-		q->tail->next = NULL;
-	}
-	free(todel);
-	q->size--;
-	return dest;
+    LocationID dest = q->tail->playerloc;
+    node *todel = q->tail;
+    if (!todel)return -2;
+    if (q->head == q->tail)q->head = q->tail = NULL;
+    else {
+        q->tail = q->tail->prev;
+        q->tail->next = NULL;
+    }
+    free(todel);
+    q->size--;
+    return dest;
 }
 
 LocationID pop(qlist q)
 {
-	node *todel = q->head;
-	LocationID dest = q->head->playerloc;
-	if (!q->head)return -2;
-	if (q->head == q->tail){
-		q->head = q->tail = NULL;
-	} else {
-		q->head = q->head->next;
-		q->head->prev = NULL;
-	}
-	free(todel);
-	q->size--;
-	return dest;
+    node *todel = q->head;
+    LocationID dest = q->head->playerloc;
+    if (!q->head)return -2;
+    if (q->head == q->tail){
+        q->head = q->tail = NULL;
+    } else {
+        q->head = q->head->next;
+        q->head->prev = NULL;
+    }
+    free(todel);
+    q->size--;
+    return dest;
 }
 
 LocationID peek(qlist q, int n)
 {
-	if (q->tail == NULL)return -2;
-	if (n == 1)return q->tail->playerloc;
+    if (q->tail == NULL)return -2;
+    if (n == 1)return q->tail->playerloc;
 
-	int i = 0;
-	node *curr = q->head;
-	for (; i < q->size - n && q->size > n && curr != NULL; i++, curr = curr->next);
-	return curr->playerloc;
+    int i = 0;
+    node *curr = q->head;
+    for (; i < q->size - n && q->size > n && curr != NULL; i++, curr = curr->next);
+    return curr->playerloc;
 }
 
 void push(qlist q, LocationID it)
 {
-	node *n = malloc(sizeof(node));
-	n->playerloc = it; n->next = NULL; n->prev = NULL;
-	if (q->size == 0){
-		q->head = q->tail = n;
-		q->size++;
-		return;
-	}
-	if (q->size == TRAIL_SIZE) {
-		pop(q);
-	}
-	n->prev = q->tail;
-	q->tail->next = n;
-	q->tail = n;
-	q->size++;
+    node *n = malloc(sizeof(node));
+    n->playerloc = it; n->next = NULL; n->prev = NULL;
+    if (q->size == 0){
+        q->head = q->tail = n;
+        q->size++;
+        return;
+    }
+    if (q->size == TRAIL_SIZE) {
+        pop(q);
+    }
+    n->prev = q->tail;
+    q->tail->next = n;
+    q->tail = n;
+    q->size++;
 }
 
 void testQueue()
 {
-	qlist q[4];
-	for (int i = 0; i < 4; i++){
-		q[i] = init();
-	}
-	assert(q[0]->head == NULL && q[0]->tail == NULL && q[0]->size == 0);
-	assert(q[1]->head == NULL && q[1]->tail == NULL && q[1]->size == 0);
-	assert(q[2]->head == NULL && q[2]->tail == NULL && q[2]->size == 0);
-	assert(q[3]->head == NULL && q[3]->tail == NULL && q[3]->size == 0);
-	assert(isEmpty(q[0]) == 1);
+    qlist q[4];
+    for (int i = 0; i < 4; i++){
+        q[i] = init();
+    }
+    assert(q[0]->head == NULL && q[0]->tail == NULL && q[0]->size == 0);
+    assert(q[1]->head == NULL && q[1]->tail == NULL && q[1]->size == 0);
+    assert(q[2]->head == NULL && q[2]->tail == NULL && q[2]->size == 0);
+    assert(q[3]->head == NULL && q[3]->tail == NULL && q[3]->size == 0);
+    assert(isEmpty(q[0]) == 1);
 
-	push(q[0], 1);
-	assert(peek(q[0],1) == 1);
-	assert(q[0]->head->playerloc == 1 && q[0]->tail->playerloc == 1 && q[0]->size == 1);
+    push(q[0], 1);
+    assert(peek(q[0],1) == 1);
+    assert(q[0]->head->playerloc == 1 && q[0]->tail->playerloc == 1 && q[0]->size == 1);
 
-	push(q[0], 2);
-	assert(peek(q[0], 1) == 2);
-	assert(q[0]->head->playerloc == 1 && q[0]->tail->playerloc == 2 && q[0]->size == 2);
-	
-	assert(pop(q[0]) == 1);
-	assert(peek(q[0], 1) == 2);
-	assert(q[0]->head->playerloc == 2 && q[0]->tail->playerloc == 2 && q[0]->size == 1);
+    push(q[0], 2);
+    assert(peek(q[0], 1) == 2);
+    assert(q[0]->head->playerloc == 1 && q[0]->tail->playerloc == 2 && q[0]->size == 2);
+    
+    assert(pop(q[0]) == 1);
+    assert(peek(q[0], 1) == 2);
+    assert(q[0]->head->playerloc == 2 && q[0]->tail->playerloc == 2 && q[0]->size == 1);
 
-	push(q[0], 1);
-	push(q[0], 3);
-	push(q[0], 4);
-	push(q[0], 5);
-	push(q[0], 6);
-	push(q[0], 7);
+    push(q[0], 1);
+    push(q[0], 3);
+    push(q[0], 4);
+    push(q[0], 5);
+    push(q[0], 6);
+    push(q[0], 7);
 
-	assert(q[0]->head->playerloc = 1 && q[0]->tail->playerloc == 7 && q[0]->size == 6);
-	assert(spop(q[0]) == 7);
-	assert(q[0]->tail->playerloc == 6 && peek(q[0], 1) == 6 && q[0]->size == 5);
-	assert(peek(q[0], 2) == 5);
-	assert(peek(q[0], 3) == 4);
-	assert(peek(q[0], 4) == 3);
-	assert(peek(q[0], 5) == 1);
+    assert(q[0]->head->playerloc = 1 && q[0]->tail->playerloc == 7 && q[0]->size == 6);
+    assert(spop(q[0]) == 7);
+    assert(q[0]->tail->playerloc == 6 && peek(q[0], 1) == 6 && q[0]->size == 5);
+    assert(peek(q[0], 2) == 5);
+    assert(peek(q[0], 3) == 4);
+    assert(peek(q[0], 4) == 3);
+    assert(peek(q[0], 5) == 1);
 }
 //============================================================= Q ends Here ================================================//
 //==========================================================================================================================//
@@ -151,123 +151,123 @@ void testQueue()
 //records the action of hunter "player" in one particular turn
 void Hunter(GameView gv, qlist q, char *plays, PlayerID player)
 {
-	LocationID prevloc = peek(q, 1);
-	LocationID currloc = abbrevToID(plays + 1);
-	push(q, currloc);
-	if (prevloc == currloc && gv->healthPoints[player] < GAME_START_HUNTER_LIFE_POINTS){
-		gv->healthPoints[player] += LIFE_GAIN_REST;
-		if (gv->healthPoints[player] > GAME_START_HUNTER_LIFE_POINTS)
-			gv->healthPoints[player] = GAME_START_HUNTER_LIFE_POINTS;
-	}
-	if (plays[3] == 'T'){
-//		printf("%d triggered a trap, lost 2 life point\n",player);
-		gv->healthPoints[player] -= LIFE_LOSS_TRAP_ENCOUNTER;
-//		printf("%d now on -> %d\n", gv->healthPoints[player]);
-	}
-	if (plays[3] == 'V' || plays[4] == 'V');//to be decided
-	if (plays[3] == 'D' || plays[4] == 'D' || plays[5] == 'D'){
-//		printf("%d encountered dracula, lost 4 life point\n", player);
-		gv->healthPoints[PLAYER_DRACULA] -= LIFE_LOSS_HUNTER_ENCOUNTER;
-		gv->healthPoints[player] -= LIFE_LOSS_DRACULA_ENCOUNTER;
-//		printf("%d now on -> %d\n",gv->healthPoints[player]);
-	}
+    LocationID prevloc = peek(q, 1);
+    LocationID currloc = abbrevToID(plays + 1);
+    push(q, currloc);
+    if (prevloc == currloc && gv->healthPoints[player] < GAME_START_HUNTER_LIFE_POINTS){
+        gv->healthPoints[player] += LIFE_GAIN_REST;
+        if (gv->healthPoints[player] > GAME_START_HUNTER_LIFE_POINTS)
+            gv->healthPoints[player] = GAME_START_HUNTER_LIFE_POINTS;
+    }
+    if (plays[3] == 'T'){
+//        printf("%d triggered a trap, lost 2 life point\n",player);
+        gv->healthPoints[player] -= LIFE_LOSS_TRAP_ENCOUNTER;
+//        printf("%d now on -> %d\n", gv->healthPoints[player]);
+    }
+    if (plays[3] == 'V' || plays[4] == 'V');//to be decided
+    if (plays[3] == 'D' || plays[4] == 'D' || plays[5] == 'D'){
+//        printf("%d encountered dracula, lost 4 life point\n", player);
+        gv->healthPoints[PLAYER_DRACULA] -= LIFE_LOSS_HUNTER_ENCOUNTER;
+        gv->healthPoints[player] -= LIFE_LOSS_DRACULA_ENCOUNTER;
+//        printf("%d now on -> %d\n",gv->healthPoints[player]);
+    }
 
-	if (gv->healthPoints[player] <= 0){
-//		printf("%d died, resurrect with 9 life point\n", player);
-		gv->healthPoints[player] = GAME_START_HUNTER_LIFE_POINTS;
-		push(q, ST_JOSEPH_AND_ST_MARYS);
-//		printf("%d now on -> %d\n", player,gv->healthPoints[player]);
-		gv->score -= SCORE_LOSS_HUNTER_HOSPITAL;
-	}
+    if (gv->healthPoints[player] <= 0){
+//        printf("%d died, resurrect with 9 life point\n", player);
+        gv->healthPoints[player] = GAME_START_HUNTER_LIFE_POINTS;
+        push(q, ST_JOSEPH_AND_ST_MARYS);
+//        printf("%d now on -> %d\n", player,gv->healthPoints[player]);
+        gv->score -= SCORE_LOSS_HUNTER_HOSPITAL;
+    }
 }
 
 void Dracula(GameView gv, qlist q, char *play)
 {
-	if (play[1] == 'H' && play[2] == 'I'){
-		if (peek(q,1) == CASTLE_DRACULA)
-			gv->healthPoints[PLAYER_DRACULA] += LIFE_GAIN_CASTLE_DRACULA;
-		push(q, HIDE);
-	} else if (play[1] == 'D' && isdigit(play[2])){
-		LocationID curloc = peek(q, play[2] - '0');
-		push(q, 102 + (play[2] - '0'));
-		if (curloc == TELEPORT){
-			gv->healthPoints[PLAYER_DRACULA] += LIFE_GAIN_CASTLE_DRACULA;
-		}else if (curloc != CITY_UNKNOWN && curloc != HIDE && curloc != NOWHERE &&
-			(curloc == SEA_UNKNOWN || idToType(curloc) == 2)){
-			gv->healthPoints[PLAYER_DRACULA] -= LIFE_LOSS_SEA;
-		}
-	} else if (play[1] == 'T' && play[2] == 'P'){
-		push(q, TELEPORT);
-		gv->healthPoints[PLAYER_DRACULA] += LIFE_GAIN_CASTLE_DRACULA;
-	
-	} else if (play[1] == 'C' && play[2] == '?'){
-		push(q, CITY_UNKNOWN);
-	
-	} else if (play[1] == 'S' && play[2] == '?'){
-		push(q, SEA_UNKNOWN);
-		gv->healthPoints[PLAYER_DRACULA] -= LIFE_LOSS_SEA;
-	
-	} else{
-		LocationID curloc = abbrevToID(play + 1);
-		push(q, curloc);
-		if (idToType(curloc) == 2)gv->healthPoints[PLAYER_DRACULA] -= LIFE_LOSS_SEA;
-		else if (curloc == CASTLE_DRACULA)gv->healthPoints[PLAYER_DRACULA] += LIFE_GAIN_CASTLE_DRACULA;
-	}
+    if (play[1] == 'H' && play[2] == 'I'){
+        if (peek(q,1) == CASTLE_DRACULA)
+            gv->healthPoints[PLAYER_DRACULA] += LIFE_GAIN_CASTLE_DRACULA;
+        push(q, HIDE);
+    } else if (play[1] == 'D' && isdigit(play[2])){
+        LocationID curloc = peek(q, play[2] - '0');
+        push(q, 102 + (play[2] - '0'));
+        if (curloc == TELEPORT){
+            gv->healthPoints[PLAYER_DRACULA] += LIFE_GAIN_CASTLE_DRACULA;
+        }else if (curloc != CITY_UNKNOWN && curloc != HIDE && curloc != NOWHERE &&
+            (curloc == SEA_UNKNOWN || idToType(curloc) == 2)){
+            gv->healthPoints[PLAYER_DRACULA] -= LIFE_LOSS_SEA;
+        }
+    } else if (play[1] == 'T' && play[2] == 'P'){
+        push(q, TELEPORT);
+        gv->healthPoints[PLAYER_DRACULA] += LIFE_GAIN_CASTLE_DRACULA;
+    
+    } else if (play[1] == 'C' && play[2] == '?'){
+        push(q, CITY_UNKNOWN);
+    
+    } else if (play[1] == 'S' && play[2] == '?'){
+        push(q, SEA_UNKNOWN);
+        gv->healthPoints[PLAYER_DRACULA] -= LIFE_LOSS_SEA;
+    
+    } else{
+        LocationID curloc = abbrevToID(play + 1);
+        push(q, curloc);
+        if (idToType(curloc) == 2)gv->healthPoints[PLAYER_DRACULA] -= LIFE_LOSS_SEA;
+        else if (curloc == CASTLE_DRACULA)gv->healthPoints[PLAYER_DRACULA] += LIFE_GAIN_CASTLE_DRACULA;
+    }
 
-	if (play[3] == 'T'){
-		;//TO BE DECIDED
-	}
+    if (play[3] == 'T'){
+        ;//TO BE DECIDED
+    }
 
-	if (play[4] == 'V'){
-		;//TO BE DECIDED
-	}
+    if (play[4] == 'V'){
+        ;//TO BE DECIDED
+    }
 
-	if (play[5] == 'M'){
-		;//TO BE DECIDED
-	} else if (play[5] == 'V'){
-		gv->score -= SCORE_LOSS_VAMPIRE_MATURES;
-	}
-	gv->score -= SCORE_LOSS_DRACULA_TURN;
+    if (play[5] == 'M'){
+        ;//TO BE DECIDED
+    } else if (play[5] == 'V'){
+        gv->score -= SCORE_LOSS_VAMPIRE_MATURES;
+    }
+    gv->score -= SCORE_LOSS_DRACULA_TURN;
 }
 
 void newGame(GameView gv,qlist q[])
 {
-	gv->round = 0;
-	gv->score = GAME_START_SCORE;
-	int i = 0;
-	while (i < NUM_PLAYERS - 1){
-		gv->healthPoints[i] = GAME_START_HUNTER_LIFE_POINTS;
-		push(q[i++],UNKNOWN_LOCATION);
-	}
-	gv->healthPoints[i] = GAME_START_BLOOD_POINTS;
-	push(q[i],UNKNOWN_LOCATION);
+    gv->round = 0;
+    gv->score = GAME_START_SCORE;
+    int i = 0;
+    while (i < NUM_PLAYERS - 1){
+        gv->healthPoints[i] = GAME_START_HUNTER_LIFE_POINTS;
+        push(q[i++],UNKNOWN_LOCATION);
+    }
+    gv->healthPoints[i] = GAME_START_BLOOD_POINTS;
+    push(q[i],UNKNOWN_LOCATION);
 }
 
 // Creates a new GameView to summarise the current state of the game
 GameView newGameView(char *pastPlays, PlayerMessage messages[])
 {
-	GameView gv = malloc(sizeof(struct gameView));
-	qlist history[NUM_PLAYERS];
-	int i = 0,playerID = 0;;
-	for (; i < NUM_PLAYERS; i++)history[i] = init();
-	newGame(gv,history);
-	gv->round = (strlen(pastPlays)+1) / (TURN_LEN * NUM_PLAYERS);
+    GameView gv = malloc(sizeof(struct gameView));
+    qlist history[NUM_PLAYERS];
+    int i = 0,playerID = 0;;
+    for (; i < NUM_PLAYERS; i++)history[i] = init();
+    newGame(gv,history);
+    gv->round = (strlen(pastPlays)+1) / (TURN_LEN * NUM_PLAYERS);
 
-	for (i = 0; pastPlays[i] != '\0'; i += 8){
-		if (pastPlays[i] == 'G')Hunter(gv, history[PLAYER_LORD_GODALMING], pastPlays + i, PLAYER_LORD_GODALMING);
-		else if (pastPlays[i] == 'S')Hunter(gv, history[PLAYER_DR_SEWARD], pastPlays + i, PLAYER_DR_SEWARD);
-		else if (pastPlays[i] == 'H')Hunter(gv, history[PLAYER_VAN_HELSING], pastPlays + i, PLAYER_VAN_HELSING);
-		else if (pastPlays[i] == 'M')Hunter(gv, history[PLAYER_MINA_HARKER], pastPlays + i, PLAYER_MINA_HARKER);
-		else Dracula(gv, history[PLAYER_DRACULA], pastPlays + i);
-	}
-	
-	for (; playerID < NUM_PLAYERS; playerID++){
-		for (i = 0; i < TRAIL_SIZE && !isEmpty(history[playerID]);i++){
-			gv->playerLocations[playerID][i] = spop(history[playerID]);
-		}
-		free(history[playerID]); //the list is empty after the above for loop so we don't need to free each node
-	}
-	return gv;
+    for (i = 0; pastPlays[i] != '\0'; i += 8){
+        if (pastPlays[i] == 'G')Hunter(gv, history[PLAYER_LORD_GODALMING], pastPlays + i, PLAYER_LORD_GODALMING);
+        else if (pastPlays[i] == 'S')Hunter(gv, history[PLAYER_DR_SEWARD], pastPlays + i, PLAYER_DR_SEWARD);
+        else if (pastPlays[i] == 'H')Hunter(gv, history[PLAYER_VAN_HELSING], pastPlays + i, PLAYER_VAN_HELSING);
+        else if (pastPlays[i] == 'M')Hunter(gv, history[PLAYER_MINA_HARKER], pastPlays + i, PLAYER_MINA_HARKER);
+        else Dracula(gv, history[PLAYER_DRACULA], pastPlays + i);
+    }
+    
+    for (; playerID < NUM_PLAYERS; playerID++){
+        for (i = 0; i < TRAIL_SIZE && !isEmpty(history[playerID]);i++){
+            gv->playerLocations[playerID][i] = spop(history[playerID]);
+        }
+        free(history[playerID]); //the list is empty after the above for loop so we don't need to free each node
+    }
+    return gv;
 }
 
      
