@@ -267,6 +267,29 @@ void updateVam(TrapVam tv, LocationID place, int type)
     }
 }
 
+void freeTravm(TrapVam ts)
+{
+    node *curr = ts->trap->head;
+    node *temp = curr;
+    while (curr != NULL){
+        temp = curr;
+        curr = curr->next;
+        free(temp);
+    }
+    free(temp);
+    free(ts->trap);
+
+    curr = ts->vam->head;
+    temp = curr;
+    while (curr != NULL){
+        temp = curr;
+        curr = curr->next;
+        free(temp);
+    }
+    free(temp);
+    free(ts->vam);
+}
+
 //==========================================================================================================================//
 //====================================================== End for trap ======================================================//
 
@@ -400,6 +423,7 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
         }
         free(history[playerID]); //the list is empty after the above for loop so we don't need to free each node
     }
+    free(traps);
     return gv;
 }
 
