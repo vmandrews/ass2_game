@@ -285,19 +285,19 @@ void disposeGameView(GameView toBeDeleted)
 // Get the current round
 Round getRound(GameView currentView)
 {
-     return currentView->round * NUM_PLAYER % NUM+PLAYER;
+    return currentView->round;
 }
 
 // Get the id of current player - ie whose turn is it?
 PlayerID getCurrentPlayer(GameView currentView)
 {
-    return(getRound(currentView) % NUM_PLAYERS);
+    return currentView->round * NUM_PLAYER % NUM+PLAYER;
 }
 
 // Get the current score
 int getScore(GameView currentView)
 {
-     return currentView->score;
+    return currentView->score;
 }
 
 // Get the current health points for a given player
