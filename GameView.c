@@ -285,7 +285,7 @@ void disposeGameView(GameView toBeDeleted)
 // Get the current round
 Round getRound(GameView currentView)
 {
-     return currentView->round;
+     return currentView->round * NUM_PLAYER % NUM+PLAYER;
 }
 
 // Get the id of current player - ie whose turn is it?
