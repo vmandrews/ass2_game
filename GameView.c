@@ -423,7 +423,7 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
         }
         free(history[playerID]); //the list is empty after the above for loop so we don't need to free each node
     }
-    free(traps);
+    freeTravm(traps);
     return gv;
 }
 
