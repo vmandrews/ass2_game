@@ -47,9 +47,9 @@ qlist init()
     return newq;
 }
 
-int isEmpty(qlist q)
+int isNotEmpty(qlist q)
 {
-    return !q->size;
+    return q->size;
 }
 
 LocationID spop(qlist q)
@@ -104,9 +104,7 @@ void push(qlist q, LocationID it)
         q->size++;
         return;
     }
-    if (q->size == TRAIL_SIZE) {
-        pop(q);
-    }
+    
     n->prev = q->tail;
     q->tail->next = n;
     q->tail = n;
@@ -124,7 +122,7 @@ void testQueue()
     assert(q[1]->head == NULL && q[1]->tail == NULL && q[1]->size == 0);
     assert(q[2]->head == NULL && q[2]->tail == NULL && q[2]->size == 0);
     assert(q[3]->head == NULL && q[3]->tail == NULL && q[3]->size == 0);
-    assert(isEmpty(q[0]) == 1);
+    assert(isNotEmpty(q[0]) == 0);
 
     push(q[0], 1);
     assert(peek(q[0],1) == 1);
@@ -282,6 +280,7 @@ void Hunter(GameView gv, qlist q, char *plays, PlayerID player, TrapVam tpvs)
 {
     LocationID prevloc = peek(q, 1);
     LocationID currloc = abbrevToID(plays + 1);
+    if(isNotEmpty(q) == 6)pop(q);
     push(q, currloc);
     if (prevloc == currloc && gv->healthPoints[player] < GAME_START_HUNTER_LIFE_POINTS){
         gv->healthPoints[player] += LIFE_GAIN_REST;
@@ -305,6 +304,7 @@ void Hunter(GameView gv, qlist q, char *plays, PlayerID player, TrapVam tpvs)
     if (gv->healthPoints[player] <= 0){
 //        printf("%d died, resurrect with 9 life point\n", player);
         gv->healthPoints[player] = GAME_START_HUNTER_LIFE_POINTS;
+        if(isNotEmpty(q) == 6)pop(q);
         push(q, ST_JOSEPH_AND_ST_MARYS);
 //        printf("%d now on -> %d\n", player,gv->healthPoints[player]);
         gv->score -= SCORE_LOSS_HUNTER_HOSPITAL;
@@ -317,9 +317,11 @@ void Dracula(GameView gv, qlist q, char *play, TrapVam tpvs)
     if (play[1] == 'H' && play[2] == 'I'){
         if (peek(q,1) == CASTLE_DRACULA)
             gv->healthPoints[PLAYER_DRACULA] += LIFE_GAIN_CASTLE_DRACULA;
+        if(isNotEmpty(q) == 6)pop(q);
         push(q, HIDE);
     } else if (play[1] == 'D' && isdigit(play[2])){
         LocationID curloc = peek(q, play[2] - '0');
+        if(isNotEmpty(q) == 6)pop(q);
         push(q, 102 + (play[2] - '0'));
         if (curloc == TELEPORT){
             gv->healthPoints[PLAYER_DRACULA] += LIFE_GAIN_CASTLE_DRACULA;
@@ -332,18 +334,22 @@ void Dracula(GameView gv, qlist q, char *play, TrapVam tpvs)
             gv->healthPoints[PLAYER_DRACULA] -= LIFE_LOSS_SEA;
         }
     } else if (play[1] == 'T' && play[2] == 'P'){
+        if(isNotEmpty(q) == 6)pop(q);
         push(q, TELEPORT);
         gv->healthPoints[PLAYER_DRACULA] += LIFE_GAIN_CASTLE_DRACULA;
     
     } else if (play[1] == 'C' && play[2] == '?'){
+        if(isNotEmpty(q) == 6)pop(q);
         push(q, CITY_UNKNOWN);
     
     } else if (play[1] == 'S' && play[2] == '?'){
+        if(isNotEmpty(q) == 6)pop(q);
         push(q, SEA_UNKNOWN);
         gv->healthPoints[PLAYER_DRACULA] -= LIFE_LOSS_SEA;
     
     } else{
         LocationID curloc = abbrevToID(play + 1);
+        if(isNotEmpty(q) == 6)pop(q);
         push(q, curloc);
         if (idToType(curloc) == 2)gv->healthPoints[PLAYER_DRACULA] -= LIFE_LOSS_SEA;
         else if (curloc == CASTLE_DRACULA)gv->healthPoints[PLAYER_DRACULA] += LIFE_GAIN_CASTLE_DRACULA;
@@ -373,9 +379,11 @@ void newGame(GameView gv,qlist q[])
     int i = 0;
     while (i < NUM_PLAYERS - 1){
         gv->healthPoints[i] = GAME_START_HUNTER_LIFE_POINTS;
+        if(isNotEmpty(q) == 6)pop(q);
         push(q[i++],UNKNOWN_LOCATION);
     }
     gv->healthPoints[i] = GAME_START_BLOOD_POINTS;
+    if(isNotEmpty(q) == 6)pop(q);
     push(q[i],UNKNOWN_LOCATION);
 }
 
@@ -403,7 +411,7 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
     }
     
     for (; playerID < NUM_PLAYERS; playerID++){
-        for (i = 0; i < TRAIL_SIZE && !isEmpty(history[playerID]);i++){
+        for (i = 0; i < TRAIL_SIZE && isNotEmpty(history[playerID]);i++){
             gv->playerLocations[playerID][i] = spop(history[playerID]);
         }
         free(history[playerID]); //the list is empty after the above for loop so we don't need to free each node
