@@ -220,6 +220,40 @@ void getHistory(GameView currentView, PlayerID player,LocationID trail[TRAIL_SIZ
     }
 }
 
+void filterH(TrapVam connect, Round round, PlayerID player)
+{
+	assert(connect->trap != NULL && connect->vam != NULL);
+	int size = connect->trap->size;
+	LocationID place;
+	LocationID type;
+	while (!(round+player)%4 && size > 0){
+		place = pop(connect->trap);
+		type = pop(connect->vam);
+		size--;
+		if (!(type == RAIL)){
+			push(connect->trap,place);
+			push(connect->vam, type);
+		}
+	}
+}
+
+void filterD(TrapVam connect, Round round, PlayerID player)
+{
+	assert(connect->trap != NULL && connect->vam != NULL);
+	int size = connect->trap->size;
+	LocationID place;
+	LocationID type;
+	while (size > 0){
+		place = pop(connect->trap);
+		type = pop(connect->vam);
+		size--;
+		if (!(type == RAIL) && !(place == ST_JOSEPH_AND_ST_MARYS)){
+			push(connect->trap, place);
+			push(connect->vam, type);
+		}
+	}
+}
+
 //// Functions that query the map to find information about connectivity
 
 // Returns an array of LocationIDs for all directly connected locations
