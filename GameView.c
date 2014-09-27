@@ -393,7 +393,8 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
     traps->trap = init();
     traps->vam = init();
 
-    for (i = 0; pastPlays[i] != '\0'; i += 8){
+    for (i = 0; pastPlays[i] != '\0'; i += 7){
+        if(i)i++;
         if (pastPlays[i] == 'G')Hunter(gv, history[PLAYER_LORD_GODALMING], pastPlays + i, PLAYER_LORD_GODALMING,traps);
         else if (pastPlays[i] == 'S')Hunter(gv, history[PLAYER_DR_SEWARD], pastPlays + i, PLAYER_DR_SEWARD,traps);
         else if (pastPlays[i] == 'H')Hunter(gv, history[PLAYER_VAN_HELSING], pastPlays + i, PLAYER_VAN_HELSING,traps);
