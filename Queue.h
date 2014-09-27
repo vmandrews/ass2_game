@@ -14,6 +14,18 @@ typedef struct node{
     struct node *prev;
 }node;
 
+typedef struct queue{
+    node *head;
+    node *tail;
+    int size;
+}queue;
+
+typedef struct trapVam{
+    qlist trap;
+    qlist vam;
+}trapVam;
+
+
 qlist init();
 int isNotEmpty(qlist q);
 LocationID spop(qlist q);
