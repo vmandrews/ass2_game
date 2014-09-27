@@ -8,10 +8,10 @@ all : $(BINS)
 testGameView : testGameView.o GameView.o Map.o Places.o Queue.o
 testGameView.o : testGameView.c Globals.h Game.h 
 
-testHunterView : testHunterView.o HunterView.o Map.o Places.o Queue.o
+testHunterView : testHunterView.o HunterView.o Map.o Places.o Queue.o GameView.o
 testHunterView.o : testHunterView.c Map.c Places.h
 
-testDracView : testDracView.o DracView.o Map.o Places.o Queue.o
+testDracView : testDracView.o DracView.o Map.o Places.o Queue.o GameView.o
 testDracView.o : testDracView.c Map.c Places.h
 
 Queue.o : Queue.c Queue.h
