@@ -25,6 +25,6 @@ void movetrap(qlist q, LocationID place);
 int trapNum(TrapVam tv, LocationID place, int trapType);
 void updateTrap(TrapVam tv,LocationID place,int type);
 void updateVam(TrapVam tv, LocationID place, int type);
-void freeTravm(TrapVam ts)
+void freeTravm(TrapVam ts);
 
 #endif
