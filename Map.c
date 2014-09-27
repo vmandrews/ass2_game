@@ -71,23 +71,23 @@ static VList insertVList(VList L, LocationID v, TransportID type)
 
 static int inVList(VList L, LocationID v, TransportID type)
 {
-	VList cur;
-	for (cur = L; cur != NULL; cur = cur->next) {
-		if (cur->v == v && cur->type == type) return 1;
-	}
-	return 0;
+    VList cur;
+    for (cur = L; cur != NULL; cur = cur->next) {
+        if (cur->v == v && cur->type == type) return 1;
+    }
+    return 0;
 }
 
 // Add a new edge to the Map/Graph
 void addLink(Map g, LocationID start, LocationID end, TransportID type)
 {
-	assert(g != NULL);
-	// don't add edges twice
-	if (!inVList(g->connections[start],end,type)) {
-   	g->connections[start] = insertVList(g->connections[start],end,type);
-   	g->connections[end] = insertVList(g->connections[end],start,type);
-   	g->nE++;
-	}
+    assert(g != NULL);
+    // don't add edges twice
+    if (!inVList(g->connections[start],end,type)) {
+       g->connections[start] = insertVList(g->connections[start],end,type);
+       g->connections[end] = insertVList(g->connections[end],start,type);
+       g->nE++;
+    }
 }
 
 // Display content of Map/Graph
@@ -137,27 +137,27 @@ int numE(Map g, TransportID type)
 // Returns number of direct connections between two nodes 
 int connections(Map g, LocationID start,int type[])
 {
-	VList curr = g->connections[start];
-	int i = 0;
-	for (; curr != NULL; curr = curr->next){
-		if (type[curr->type - 1]){
-			i++;
-		}
-	}
-	return i;
+    VList curr = g->connections[start];
+    int i = 0;
+    for (; curr != NULL; curr = curr->next){
+        if (type[curr->type - 1]){
+            i++;
+        }
+    }
+    return i;
 }
 LocationID *neighbor(Map g, LocationID start, int type[], int what,int len)
 {
-	VList curr = g->connections[start];
-	int i = 0;
-	LocationID* Locortype = malloc(sizeof(LocationID)*len);
-	for (; curr != NULL; curr = curr->next){
-		if (type[curr->type - 1]){
-			if (what == 0)Locortype[i++] = curr->v;
-			else Locortype[i++] = curr->type;
-		}
-	}
-	return Locortype;
+    VList curr = g->connections[start];
+    int i = 0;
+    LocationID* Locortype = malloc(sizeof(LocationID)*len);
+    for (; curr != NULL; curr = curr->next){
+        if (type[curr->type - 1]){
+            if (what == 0)Locortype[i++] = curr->v;
+            else Locortype[i++] = curr->type;
+        }
+    }
+    return Locortype;
 }
 
 // Add edges to Graph representing map of Europe

@@ -83,21 +83,21 @@ void push(qlist q, LocationID it)
 
 void removeDuplicate(qlist q)
 {
-	qlist temp = init();
-	LocationID place;
-	int numDup,i;
-	while (isNotEmpty(q)){
-		place = pop(q);
-		if ((numDup = trapNum(q, place))){
-			for (i = 0; i < numDup; i++)movetrap(q, place);
-		}
-		push(temp, place);
-	}
+    qlist temp = init();
+    LocationID place;
+    int numDup,i;
+    while (isNotEmpty(q)){
+        place = pop(q);
+        if ((numDup = trapNum(q, place))){
+            for (i = 0; i < numDup; i++)movetrap(q, place);
+        }
+        push(temp, place);
+    }
 
-	while (isNotEmpty(temp)){
-		push(q, pop(temp));
-	}
-	free(temp);
+    while (isNotEmpty(temp)){
+        push(q, pop(temp));
+    }
+    free(temp);
 }
 
 //============================================================= Q ends Here ================================================//
@@ -159,7 +159,7 @@ int trapNum(qlist tv, LocationID place)
 void updateTrap(TrapVam tv,LocationID place,int type)
 {
     if (type == 0){
-        int traps = trapNum(tv, place, 0), i = 0;
+        int traps = trapNum(tv->trap, place), i = 0;
         for (; i < traps; i++){
             movetrap(tv->trap, place);
         }
@@ -177,7 +177,7 @@ void updateTrap(TrapVam tv,LocationID place,int type)
 void updateVam(TrapVam tv, LocationID place, int type)
 {
     if (type == 0){
-        int traps = trapNum(tv, place, 1), i = 0;
+        int traps = trapNum(tv->vam, place), i = 0;
         for (; i < traps; i++){
             movetrap(tv->vam, place);
         }

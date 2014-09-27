@@ -222,36 +222,36 @@ void getHistory(GameView currentView, PlayerID player,LocationID trail[TRAIL_SIZ
 
 void filterH(TrapVam connect, Round round, PlayerID player)
 {
-	assert(connect->trap != NULL && connect->vam != NULL);
-	int size = connect->trap->size;
-	LocationID place;
-	LocationID type;
-	while (!(round+player)%4 && size > 0){
-		place = pop(connect->trap);
-		type = pop(connect->vam);
-		size--;
-		if (!(type == RAIL)){
-			push(connect->trap,place);
-			push(connect->vam, type);
-		}
-	}
+    assert(connect->trap != NULL && connect->vam != NULL);
+    int size = connect->trap->size;
+    LocationID place;
+    LocationID type;
+    while (!(round+player)%4 && size > 0){
+        place = pop(connect->trap);
+        type = pop(connect->vam);
+        size--;
+        if (!(type == RAIL)){
+            push(connect->trap,place);
+            push(connect->vam, type);
+        }
+    }
 }
 
 void filterD(TrapVam connect, Round round, PlayerID player)
 {
-	assert(connect->trap != NULL && connect->vam != NULL);
-	int size = connect->trap->size;
-	LocationID place;
-	LocationID type;
-	while (size > 0){
-		place = pop(connect->trap);
-		type = pop(connect->vam);
-		size--;
-		if (!(type == RAIL) && !(place == ST_JOSEPH_AND_ST_MARYS)){
-			push(connect->trap, place);
-			push(connect->vam, type);
-		}
-	}
+    assert(connect->trap != NULL && connect->vam != NULL);
+    int size = connect->trap->size;
+    LocationID place;
+    LocationID type;
+    while (size > 0){
+        place = pop(connect->trap);
+        type = pop(connect->vam);
+        size--;
+        if (!(type == RAIL) && !(place == ST_JOSEPH_AND_ST_MARYS)){
+            push(connect->trap, place);
+            push(connect->vam, type);
+        }
+    }
 }
 
 //// Functions that query the map to find information about connectivity
@@ -263,37 +263,37 @@ LocationID *connectedLocations(GameView currentView, int *numLocations,
                                int road, int rail, int sea)
 {
  TrapVam connect = malloc(sizeof(trapVam));
-	Map g = newMap();
-	int boolType[] = { road, rail, sea };
+    Map g = newMap();
+    int boolType[] = { road, rail, sea };
 
-	connect->trap = init(); // this q stores the locationID
-	connect->vam = init(); //  this q stores the type of transport
+    connect->trap = init(); // this q stores the locationID
+    connect->vam = init(); //  this q stores the type of transport
 
-	int len = connections(g, from, boolType);
-	LocationID* places = neighbor(g,from,boolType,0,len);
-	TransportID* types = neighbor(g, from, boolType, 1, len);
+    int len = connections(g, from, boolType);
+    LocationID* places = neighbor(g,from,boolType,0,len);
+    TransportID* types = neighbor(g, from, boolType, 1, len);
 
-	int i = 0;
-	for (; i < len; i++){
-		push(connect->trap, places[i]);
-		push(connect->vam, types[i]);
-	}
+    int i = 0;
+    for (; i < len; i++){
+        push(connect->trap, places[i]);
+        push(connect->vam, types[i]);
+    }
 
-	free(places);
-	free(types);
+    free(places);
+    free(types);
 
-	if (player == PLAYER_DRACULA)filterD(connect, round, player);
-	else filterH(connect, round, player);
+    if (player == PLAYER_DRACULA)filterD(connect, round, player);
+    else filterH(connect, round, player);
 
-	removeDuplicate(connect->trap);
-	push(connect->trap, from);
-	*numLocations = connect->trap->size;
-	LocationID *tobereturn = malloc(sizeof(LocationID)*connect->trap->size);
-	
-	for (i = 0; isNotEmpty(connect->trap); i++){
-		tobereturn[i] = pop(connect->trap);
-	}
+    removeDuplicate(connect->trap);
+    push(connect->trap, from);
+    *numLocations = connect->trap->size;
+    LocationID *tobereturn = malloc(sizeof(LocationID)*connect->trap->size);
+    
+    for (i = 0; isNotEmpty(connect->trap); i++){
+        tobereturn[i] = pop(connect->trap);
+    }
 
-	freeTravm(connect);
-	return tobereturn;
+    freeTravm(connect);
+    return tobereturn;
 }
