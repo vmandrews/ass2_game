@@ -6,20 +6,33 @@
 #include "Game.h"
 #include "GameView.h"
 #include "HunterView.h"
+
 // #include "Map.h" ... if you decide to use the Map ADT
      
-struct hunterView {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    int hello;
-};
+typedef struct hunterView {
+	Round round;
+	int score;
+	int healthPoint[NUM_PLAYERS];
+	LocationID trail[NUM_PLAYERS][TRAIL_SIZE];
+}hunterView;
      
 
 // Creates a new HunterView to summarise the current state of the game
 HunterView newHunterView(char *pastPlays, PlayerMessage messages[])
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
     HunterView hunterView = malloc(sizeof(struct hunterView));
-    hunterView->hello = 42;
+	GameView gv = newGameView(pastPlays,messages);
+
+	hunterView->round = getRound(gv);
+	hunterView->score = getScore(gv);
+
+	int i = PLAYER_LORD_GODALMING;
+	for (; i <= PLAYER_DRACULA; i++){
+		getHistory(gv, i, hunterView->trail[i]);
+		hunterView->healthPoint[i] = getHealth(gv, i);
+	}
+
+	disposeGameView(gv);
     return hunterView;
 }
      
@@ -27,7 +40,6 @@ HunterView newHunterView(char *pastPlays, PlayerMessage messages[])
 // Frees all memory previously allocated for the HunterView toBeDeleted
 void disposeHunterView(HunterView toBeDeleted)
 {
-    //COMPLETE THIS IMPLEMENTATION
     free( toBeDeleted );
 }
 
@@ -36,37 +48,33 @@ void disposeHunterView(HunterView toBeDeleted)
 
 // Get the current round
 Round giveMeTheRound(HunterView currentView)
-{
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+{ 
+	return currentView->round;
 }
 
 // Get the id of current player
 PlayerID whoAmI(HunterView currentView)
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+    return currentView->round* NUM_PLAYERS % NUM_PLAYERS;
 }
 
 // Get the current score
 int giveMeTheScore(HunterView currentView)
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+	return currentView->score;
 }
 
 // Get the current health points for a given player
 int howHealthyIs(HunterView currentView, PlayerID player)
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+	return currentView->healthPoint[player];
 }
 
 // Get the current location id of a given player
 LocationID whereIs(HunterView currentView, PlayerID player)
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+//	assert(player != PLAYER_DRACULA);
+	return currentView->trail[player][0];
 }
 
 //// Functions that return information about the history of the game
@@ -75,7 +83,10 @@ LocationID whereIs(HunterView currentView, PlayerID player)
 void giveMeTheTrail(HunterView currentView, PlayerID player,
                             LocationID trail[TRAIL_SIZE])
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+	int i = 0;
+	for (; i < TRAIL_SIZE; i++) {
+		trail[i] = currentView->trail[player][i];
+	}
 }
 
 //// Functions that query the map to find information about connectivity
