@@ -81,47 +81,6 @@ void push(qlist q, LocationID it)
     q->size++;
 }
 
-#if(0)
-void testQueue()
-{
-    qlist q[4];
-    for (int i = 0; i < 4; i++){
-        q[i] = init();
-    }
-    assert(q[0]->head == NULL && q[0]->tail == NULL && q[0]->size == 0);
-    assert(q[1]->head == NULL && q[1]->tail == NULL && q[1]->size == 0);
-    assert(q[2]->head == NULL && q[2]->tail == NULL && q[2]->size == 0);
-    assert(q[3]->head == NULL && q[3]->tail == NULL && q[3]->size == 0);
-    assert(isNotEmpty(q[0]) == 0);
-
-    push(q[0], 1);
-    assert(peek(q[0],1) == 1);
-    assert(q[0]->head->playerloc == 1 && q[0]->tail->playerloc == 1 && q[0]->size == 1);
-
-    push(q[0], 2);
-    assert(peek(q[0], 1) == 2);
-    assert(q[0]->head->playerloc == 1 && q[0]->tail->playerloc == 2 && q[0]->size == 2);
-    
-    assert(pop(q[0]) == 1);
-    assert(peek(q[0], 1) == 2);
-    assert(q[0]->head->playerloc == 2 && q[0]->tail->playerloc == 2 && q[0]->size == 1);
-
-    push(q[0], 1);
-    push(q[0], 3);
-    push(q[0], 4);
-    push(q[0], 5);
-    push(q[0], 6);
-    push(q[0], 7);
-
-    assert(q[0]->head->playerloc = 1 && q[0]->tail->playerloc == 7 && q[0]->size == 6);
-    assert(spop(q[0]) == 7);
-    assert(q[0]->tail->playerloc == 6 && peek(q[0], 1) == 6 && q[0]->size == 5);
-    assert(peek(q[0], 2) == 5);
-    assert(peek(q[0], 3) == 4);
-    assert(peek(q[0], 4) == 3);
-    assert(peek(q[0], 5) == 1);
-}
-#endif
 //============================================================= Q ends Here ================================================//
 //==========================================================================================================================//
 
@@ -228,7 +187,7 @@ void freeTravm(TrapVam ts)
         curr = curr->next;
         free(temp);
     }
-    free(temp);
+    free(curr);
     free(ts->trap);
 
     curr = ts->vam->head;
@@ -238,6 +197,6 @@ void freeTravm(TrapVam ts)
         curr = curr->next;
         free(temp);
     }
-    free(temp);
+    free(curr);
     free(ts->vam);
 }
