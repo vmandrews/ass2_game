@@ -81,6 +81,25 @@ void push(qlist q, LocationID it)
     q->size++;
 }
 
+void removeDuplicate(qlist q)
+{
+	qlist temp = init();
+	LocationID place;
+	int numDup,i;
+	while (isNotEmpty(q)){
+		place = pop(q);
+		if ((numDup = trapNum(q, place))){
+			for (i = 0; i < numDup; i++)movetrap(q, place);
+		}
+		push(temp, place);
+	}
+
+	while (isNotEmpty(temp)){
+		push(q, pop(temp));
+	}
+	free(temp);
+}
+
 //============================================================= Q ends Here ================================================//
 //==========================================================================================================================//
 
@@ -123,7 +142,7 @@ void movetrap(qlist q, LocationID place)
 
 
 //0 = trap, 1 = vampire
-int trapNum(TrapVam tv, LocationID place, int trapType)
+int trapNum(qlist tv, LocationID place)
 {
     int trapNo = 0;
     node *curr = NULL;
