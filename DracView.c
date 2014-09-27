@@ -125,8 +125,8 @@ void lastMove(DracView currentView, PlayerID player,
 void whatsThere(DracView currentView, LocationID where,
                          int *numTraps, int *numVamps)
 {
-    *numTraps = trapNum(currentView->tpvs, where, 0);
-    *numVamps = trapNum(currentView->tpvs, where, 1);
+    *numTraps = trapNum(currentView->tpvs->trap, where);
+    *numVamps = trapNum(currentView->tpvs->vam, where);
 }
 
 //// Functions that return information about the history of the game
