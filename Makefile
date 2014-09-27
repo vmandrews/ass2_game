@@ -5,7 +5,7 @@ BINS = testGameView
 
 all : $(BINS)
 
-testGameView : testGameView.o GameView.o Map.o Places.o 
+testGameView : testGameView.o GameView.o Map.o Places.o Queue.o
 testGameView.o : testGameView.c Globals.h Game.h 
 
 #testHunterView : testHunterView.o HunterView.o Map.o Places.o
@@ -14,6 +14,7 @@ testGameView.o : testGameView.c Globals.h Game.h
 #testDracView : testDracView.o DracView.o Map.o Places.o
 #testDracView.o : testDracView.c Map.c Places.h
 
+Queue.o : Queue.c Queue.h
 Places.o : Places.c Places.h
 Map.o : Map.c Map.h Places.h
 GameView.o : GameView.c GameView.h
