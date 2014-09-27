@@ -6,20 +6,73 @@
 #include "Game.h"
 #include "GameView.h"
 #include "DracView.h"
-// #include "Map.h" ... if you decide to use the Map ADT
-     
-struct dracView {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    int hello;
-};
-     
+#include "Map.h" //... if you decide to use the Map ADT
+#include "Queue.h"
+
+typedef struct dracView {
+	Round round;
+	int score;
+	int healthPoint[NUM_PLAYERS];
+	LocationID trail[NUM_PLAYERS][TRAIL_SIZE];
+	TrapVam tpvs;
+}dracView;
+
+void trapHistoryH(char *pastPlay, TrapVam tpvs)
+{
+	if (pastPlay[3] == 'T')
+		updateTrap(tpvs, abbrevToID(pastPlay + 1), 0);
+
+	if (pastPlay[3] == 'V'|| pastPlay[4] == 'V')
+		updateVam(tpvs, abbrevToID(pastPlay + 1), 0);
+}
+
+void trapHistoryD(char *pastPlay, TrapVam tpvs)
+{
+	LocationID currlocation = abbrevToID(pastPlay+1);
+	
+	assert(currlocation >= ADRIATIC_SEA && currlocation <= ZURICH);
+	assert(idToType(currlocation) != SEA);
+
+	if (pastPlay[3] == 'T'){
+		updateTrap(tpvs, currlocation, 1);
+	}
+
+	if (pastPlay[4] == 'V'){
+		updateVam(tpvs, currlocation, 1);
+	}
+
+	if (pastPlay[5] == 'M'){
+		updateTrap(tpvs, currlocation, 2);
+	} else if (pastPlay[5] == 'V'){
+		updateVam(tpvs, currlocation, 2);
+	}
+}
 
 // Creates a new DracView to summarise the current state of the game
 DracView newDracView(char *pastPlays, PlayerMessage messages[])
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
     DracView dracView = malloc(sizeof(struct dracView));
-    dracView->hello = 42;
+	dracView->tpvs = malloc(sizeof(trapVam));
+	dracView->tpvs->trap = init();
+	dracView->tpvs->vam = init();
+
+	GameView gv = newGameView(pastPlays, messages);
+
+	dracView->round = getRound(gv);
+	dracView->score = getScore(gv);
+
+	int i = PLAYER_LORD_GODALMING;
+	for (; i <= PLAYER_DRACULA; i++){
+		getHistory(gv,i,dracView->trail[i]);
+		dracView->healthPoint[i] = getHealth(gv, i);
+	}
+
+	for (i = 0; pastPlays[i] != '\0'; i += 7){
+		if (i)i++;
+		if (pastPlays[i] == 'D')trapHistoryD(pastPlays + i, dracView->tpvs);
+		else trapHistoryH(pastPlays + i, dracView->tpvs);
+	}
+
     return dracView;
 }
      
@@ -27,8 +80,8 @@ DracView newDracView(char *pastPlays, PlayerMessage messages[])
 // Frees all memory previously allocated for the DracView toBeDeleted
 void disposeDracView(DracView toBeDeleted)
 {
-    //COMPLETE THIS IMPLEMENTATION
-    free( toBeDeleted );
+	freeTravm(toBeDeleted->tpvs);
+	free( toBeDeleted );
 }
 
 
@@ -37,45 +90,41 @@ void disposeDracView(DracView toBeDeleted)
 // Get the current round
 Round giveMeTheRound(DracView currentView)
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+	return currentView->round;
 }
 
 // Get the current score
 int giveMeTheScore(DracView currentView)
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+	return currentView->score;
 }
 
 // Get the current health points for a given player
 int howHealthyIs(DracView currentView, PlayerID player)
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+	return currentView->healthPoint[player];
 }
 
 // Get the current location id of a given player
 LocationID whereIs(DracView currentView, PlayerID player)
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+	return currentView->trail[player][0];
 }
 
 // Get the most recent move of a given player
 void lastMove(DracView currentView, PlayerID player,
                  LocationID *start, LocationID *end)
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return;
+	start = &(currentView->trail[player][1]);
+	end = &(currentView->trail[player][0]);
 }
 
 // Find out what minions are placed at the specified location
 void whatsThere(DracView currentView, LocationID where,
                          int *numTraps, int *numVamps)
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return;
+	*numTraps = trapNum(currentView->tpvs, where, 0);
+	*numVamps = trapNum(currentView->tpvs, where, 1);
 }
 
 //// Functions that return information about the history of the game
@@ -84,7 +133,10 @@ void whatsThere(DracView currentView, LocationID where,
 void giveMeTheTrail(DracView currentView, PlayerID player,
                             LocationID trail[TRAIL_SIZE])
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+	int i = 0;
+	for (; i < TRAIL_SIZE; i++) {
+		trail[i] = currentView->trail[player][i];
+	}
 }
 
 //// Functions that query the map to find information about connectivity
