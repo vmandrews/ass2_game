@@ -30,9 +30,11 @@ void trapHistoryD(char *pastPlay, TrapVam tpvs)
 {
     LocationID currlocation = abbrevToID(pastPlay+1);
     
-    assert(currlocation >= ADRIATIC_SEA && currlocation <= ZURICH);
-    assert(idToType(currlocation) != SEA);
-
+    if(pastPlay[3] == 'T' || pastPlay[4] == 'V'){
+        assert(currlocation >= ADRIATIC_SEA && currlocation <= ZURICH);
+        assert(idToType(currlocation) != SEA);
+    }
+    
     if (pastPlay[3] == 'T'){
         updateTrap(tpvs, currlocation, 1);
     }
