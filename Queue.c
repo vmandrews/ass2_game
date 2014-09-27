@@ -145,12 +145,7 @@ void movetrap(qlist q, LocationID place)
 int trapNum(qlist tv, LocationID place)
 {
     int trapNo = 0;
-    node *curr = NULL;
-    if (trapType){
-        curr = tv->vam->head;
-    }else{
-        curr = tv->trap->head;
-    }
+    node *curr = tv->head;
 
     for (;curr != NULL;curr = curr->next){
         if (curr->playerloc == place)trapNo++;
