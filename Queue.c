@@ -9,17 +9,6 @@
 #include "GameView.h"
 #include "Queue.h"
 
-typedef struct queue{
-    node *head;
-    node *tail;
-    int size;
-}queue;
-
-typedef struct trapVam{
-    qlist trap;
-    qlist vam;
-}trapVam;
-
 qlist init()
 {
     qlist newq = malloc(sizeof(queue));
