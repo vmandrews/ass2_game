@@ -5,7 +5,7 @@
 #include "GameView.h"
 
 typedef struct queue *qlist;
-typedef struct trapvam *Trapvam;
+typedef struct trapvam *TrapVam;
 
 typedef struct node{
     LocationID playerloc;
