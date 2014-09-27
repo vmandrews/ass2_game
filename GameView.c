@@ -379,11 +379,11 @@ void newGame(GameView gv,qlist q[])
     int i = 0;
     while (i < NUM_PLAYERS - 1){
         gv->healthPoints[i] = GAME_START_HUNTER_LIFE_POINTS;
-        if(isNotEmpty(q) == 6)pop(q);
+        if(isNotEmpty(q[i]) == 6)pop(q[i]);
         push(q[i++],UNKNOWN_LOCATION);
     }
     gv->healthPoints[i] = GAME_START_BLOOD_POINTS;
-    if(isNotEmpty(q) == 6)pop(q);
+    if(isNotEmpty(q[i]) == 6)pop(q[i]);
     push(q[i],UNKNOWN_LOCATION);
 }
 
