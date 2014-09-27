@@ -52,8 +52,7 @@ void pushtrap(qlist q, node *newt);
 void movetrap(qlist q, LocationID place);
 
 //count the number of traps at place
-//trapType 0 = trap;1 = vampire
-int trapNum(TrapVam tv, LocationID place, int trapType);
+int trapNum(qlist tv, LocationID place);
 
 //updates trap status at place
 //type indicates what kind of update
@@ -67,5 +66,8 @@ void updateVam(TrapVam tv, LocationID place, int type);
 
 //free the trap and vampire
 void freeTravm(TrapVam ts);
+
+//remove duplicat in the list
+void removeDuplicate(qlist q);
 
 #endif
