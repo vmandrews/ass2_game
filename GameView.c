@@ -228,6 +228,38 @@ LocationID *connectedLocations(GameView currentView, int *numLocations,
                                LocationID from, PlayerID player, Round round,
                                int road, int rail, int sea)
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return NULL;
+ TrapVam connect = malloc(sizeof(trapVam));
+	Map g = newMap();
+	int boolType[] = { road, rail, sea };
+
+	connect->trap = init(); // this q stores the locationID
+	connect->vam = init(); //  this q stores the type of transport
+
+	int len = connections(g, from, boolType);
+	LocationID* places = neighbor(g,from,boolType,0,len);
+	TransportID* types = neighbor(g, from, boolType, 1, len);
+
+	int i = 0;
+	for (; i < len; i++){
+		push(connect->trap, places[i]);
+		push(connect->vam, types[i]);
+	}
+
+	free(places);
+	free(types);
+
+	if (player == PLAYER_DRACULA)filterD(connect, round, player);
+	else filterH(connect, round, player);
+
+	removeDuplicate(connect->trap);
+	push(connect->trap, from);
+	*numLocations = connect->trap->size;
+	LocationID *tobereturn = malloc(sizeof(LocationID)*connect->trap->size);
+	
+	for (i = 0; isNotEmpty(connect->trap); i++){
+		tobereturn[i] = pop(connect->trap);
+	}
+
+	freeTravm(connect);
+	return tobereturn;
 }
