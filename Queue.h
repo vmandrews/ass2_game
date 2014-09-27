@@ -21,8 +21,8 @@ typedef struct queue{
 }queue;
 
 typedef struct trapVam{
-    qlist trap;
-    qlist vam;
+    queue *trap;
+    queue *vam;
 }trapVam;
 
 
