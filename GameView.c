@@ -33,7 +33,7 @@ void Hunter(GameView gv, qlist q, char *plays, PlayerID player, TrapVam tpvs)
     }
     if (plays[3] == 'T'){
 //        printf("%d triggered a trap, lost 2 life point\n",player);
-        gv->healthPoints[player] -= trapNum(tpvs,currloc,0) * LIFE_LOSS_TRAP_ENCOUNTER;
+        gv->healthPoints[player] -= trapNum(tpvs->trap,currloc) * LIFE_LOSS_TRAP_ENCOUNTER;
         updateTrap(tpvs, currloc, 0);
 //        printf("%d now on -> %d\n", gv->healthPoints[player]);
     }
