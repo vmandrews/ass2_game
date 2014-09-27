@@ -5,11 +5,10 @@
 #include "GameView.h"
 
 typedef struct queue *qlist;
-typedef struct trapvam *TrapVam;
+typedef struct trapVam *TrapVam;
 
 typedef struct node{
     LocationID playerloc;
-    int trapNum;
     struct node *next;
     struct node *prev;
 }node;
@@ -21,8 +20,8 @@ typedef struct queue{
 }queue;
 
 typedef struct trapVam{
-    queue *trap;
-    queue *vam;
+    qlist trap;
+    qlist vam;
 }trapVam;
 
 
