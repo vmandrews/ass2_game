@@ -1,16 +1,24 @@
 //=================================================================================================================//
 //==================================================== Q used for trail ===========================================//
+#include <stdlib.h>
+#include <assert.h>
+#include <string.h>
+#include <ctype.h>
+#include "Globals.h"
+#include "Game.h"
+#include "GameView.h"
+#include "Queue.h"
 
 typedef struct queue{
     node *head;
     node *tail;
     int size;
-}queue, *qlist;
+}queue;
 
 typedef struct trapVam{
     qlist trap;
     qlist vam;
-}trapVam, *TrapVam;
+}trapVam;
 
 qlist init()
 {
