@@ -118,17 +118,22 @@ void Dracula(GameView gv, qlist q, char *play, TrapVam tpvs)
 
 void newGame(GameView gv,qlist q[])
 {
-    gv->round = 0;
-    gv->score = GAME_START_SCORE;
-    int i = 0;
-    while (i < NUM_PLAYERS - 1){
-        gv->healthPoints[i] = GAME_START_HUNTER_LIFE_POINTS;
-        if(isNotEmpty(q[i]) == 6)pop(q[i]);
-        push(q[i++],UNKNOWN_LOCATION);
-    }
-    gv->healthPoints[i] = GAME_START_BLOOD_POINTS;
-    if(isNotEmpty(q[i]) == 6)pop(q[i]);
-    push(q[i],UNKNOWN_LOCATION);
+	gv->round = 0;
+	gv->score = GAME_START_SCORE;
+	int i = 0,j;
+	while (i < NUM_PLAYERS - 1){
+		gv->healthPoints[i] = GAME_START_HUNTER_LIFE_POINTS;
+		for (j = 0; j < TRAIL_SIZE; j++){
+			if (isNotEmpty(q[i]) == 6)pop(q[i]);
+			push(q[i], UNKNOWN_LOCATION);
+		}
+		i++;
+	}
+	gv->healthPoints[i] = GAME_START_BLOOD_POINTS;
+	for (j = 0; j < TRAIL_SIZE; j++){
+		if (isNotEmpty(q[i]) == 6)pop(q[i]);
+		push(q[i], UNKNOWN_LOCATION);
+	}
 }
 
 // Creates a new GameView to summarise the current state of the game
