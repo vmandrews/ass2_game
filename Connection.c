@@ -38,12 +38,12 @@ LocationID *connectedLocations(GameView currentView, int *numLocations,
     connect->vam = init(); //  this q stores the type of transport
 
     int i = ADRIATIC_SEA, j, numConnect; //i is a location counter, j is a Transport type counter used to index array
-    //j = 0 is ROAD, = 1 is RAIL, = 2 is BOAT
-    //e.g type[0] = 1 means there is 1 road tranport, type[1] = 0 means there is no rail transport
+                                         //j = 0 is ROAD, = 1 is RAIL, = 2 is BOAT
+                                         //e.g type[0] = 1 means there is 1 road tranport, type[1] = 0 means there is no rail transport
     for (; i <= ZURICH; i++){ //loops all the locationID
         numConnect = connections(g, from, i, type); //numConnect stores the number of connections
         for (j = 0; numConnect && j < NUM_TRANS; j++){ //numConnect && j < NUM_TRANS means that the loop will run if numConnect != 0(so another way of wrting this
-            //would be putting a if(numConnect != 0) outside the for loop
+                                                       //would be putting a if(numConnect != 0) outside the for loop
             if (type[j]){ //if there is this way of transport
                 push(connect->trap, i);//trap stores the locationID
                 push(connect->vam, j); //vam stores the type of transport
@@ -59,10 +59,10 @@ LocationID *connectedLocations(GameView currentView, int *numLocations,
     1. Create another newq
     LocationID it = pop(trap);
     if(trapNum(trap,it) == 0) //this means that "it" only occured once (we took it out so originally it was 1)
-    push(newq,it);
+        push(newq,it);
     else //so more than 1 occurence(duplicate)
-    for(counter = trapNum(trap,it);counter > 0;counter--){ //trapNum returns how many of this location is still in the q
-    moveTrap(stuff); //remove it 1 by 1 (moveTrap removes 1 element a time)
+        for(counter = trapNum(trap,it);counter > 0;counter--){ //trapNum returns how many of this location is still in the q
+            moveTrap(stuff); //remove it 1 by 1 (moveTrap removes 1 element a time)
     }
 
     repeat the above until q is empty
