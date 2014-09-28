@@ -58,7 +58,7 @@ Round giveMeTheRound(HunterView currentView)
 // Get the id of current player
 PlayerID whoAmI(HunterView currentView)
 {
-    return currentView->currentPlayer
+    return currentView->currentPlayer;
 }
 
 // Get the current score
