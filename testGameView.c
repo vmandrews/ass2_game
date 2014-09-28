@@ -205,25 +205,63 @@ void testGameView_1 (void)
     printf("passed\n");
 
     printf("testing get score function...\n");
-    char past_play_string[200] = "GAST... SAST... HAS.... MAS.... DC?.V..";
+    char past_play_string[200] = "GAL.... SBI.... HBI.... MBI.... DASTV..";
     new = newGameView(past_play_string, messages);
     i = getScore(new);
     assert(i == 365); //Dracula's turn finished (-1 score)
-    strcat(past_play_string, " GASD... SAST... HAS.... MAS.... DC?T.V.");
+    strcat(past_play_string, " GASTD.. SBI.... HBI.... MBI.... DC?T.V.");
     new = newGameView(past_play_string, messages);
     i = getScore(new);
     assert(i == 351); //Vampire matures (-13 score) and Dracula turn finished (-1 score)
-    strcat(past_play_string, " GJMD... SJM.... HAS.... MAS....");
+    strcat(past_play_string, " GJMD... SBI.... HBI.... MBI....");
     new = newGameView(past_play_string, messages);
     i = getScore(new);
-    printf("%d score\n",i);
-    //assert(i == 345); //LORD_GODALMING sent to hospital (-6 score)
+    assert(i == 345); //LORD_GODALMING sent to hospital (-6 score)
     printf("passed\n");
 
-    printf("testing connections...\n");
     int size;
+    i = ADRIATIC_SEA;
     LocationID *connected;
-    connected = connectedLocations(new, &size, ALICANTE, PLAYER_LORD_GODALMING, 1, 1, 1, 1);
+    printf("testing road connections...\n");
+    
+    FILE *output;
+    output = fopen("road_connections.txt", "w+");
+    fprintf(output,"");
+    fclose(output);
+    int x;
+    
+    while(i < NUM_MAP_LOCATIONS) {
+        connected = connectedLocations(new, &size, i, PLAYER_LORD_GODALMING, 0, 1, 0, 0);
+        char *from_string = idToName(i);
+        for(x = 0; x < size; x++){
+            output = fopen("road_connections.txt", "a");
+            char *location_string = idToName(connected[x]);
+            fputs(from_string, output);
+            fprintf(output, " ");
+            fputs(location_string, output);
+            fprintf(output, "\n");
+            fclose(output); 
+        }
+        i++;
+        x = 0;
+    }
+    
+
+
+
+/*
+
+Road moves: a Hunter can move to any city directly connected to the current city by a road.
+Sea moves: a Hunter can move from a port to an adjacent sea, or a sea to an adjacent sea, or a sea to an adjacent port city.
+Rail moves: The maximum distance that can be moved via rail is determined by the sum of the round number (0..366) and the Hunter number (0..3)
+sum mod 4 is 0: No train move is permitted for hunters this turn.
+sum mod 4 is 1: Hunters may move to any city adjacent to the current city via a rail link.
+sum mod 4 is 2: Hunters may move to any city adjacent to the current city via a rail link, or any city adjacent via rail to such a city.
+sum mod 4 is 3: Hunters may move to any city adjacent to the current city via a rail link, or any city adjacent via rail to such a city, or any city adjacent via rail to such a city. (IE move up to three steps by rail)
+when the rail move is to a non-adjacent city the Hunter does not actually enter the intermediate cities, so any encounters there are not encountered etc
+
+*/
+
 
     free(connected);
 
