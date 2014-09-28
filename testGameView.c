@@ -466,37 +466,43 @@ void testGameView_TL()
     printGameStatus(gv);
     printhistory(gv);
     printConnects(gv);
-
+    disposeGameView(gv);
+    
     strcat(pastPlay, " GCFTTTT SEDTTTT HGATTTT MCGTTTT DD2....");
     printf("\ntest string \"%s\"\n", pastPlay);
     gv = newGameView(pastPlay, message);
     printGameStatus(gv);
     printhistory(gv);
     printConnects(gv);
-
+    disposeGameView(gv);
+    
     strcat(pastPlay," GVI.... SVA.... HTS....");
     printf("\ntest string \"%s\"\n", pastPlay);
     gv = newGameView(pastPlay, message);
     printGameStatus(gv);
     printhistory(gv);
-
+    disposeGameView(gv);
+    
     strcat(pastPlay, " MCD.... DCD.VV. GSJ....");
     printf("\ntest string \"%s\"\n", pastPlay);
     gv = newGameView(pastPlay, message);
     printGameStatus(gv);
     printhistory(gv);
     printConnects(gv);
-
+    disposeGameView(gv);
+    
     strcat(pastPlay, " SSR.... HPR.... MPL.... DC?T.M.");
     printf("\ntest string \"%s\"\n", pastPlay);
     gv = newGameView(pastPlay, message);
     printGameStatus(gv);
     printhistory(gv);
     printConnects(gv);
-
+    disposeGameView(gv);
+    
     strcat(pastPlay, " SSR.... HPR.... MPL.... DD2T.V.");
     printf("\ntest string \"%s\"\n", pastPlay);
     gv = newGameView(pastPlay, message);
     printGameStatus(gv);
     printhistory(gv);
+    disposeGameView(gv);
 }
