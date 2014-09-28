@@ -144,12 +144,18 @@ void movetrap(qlist q, LocationID place)
         if (curr->playerloc == place)break;
     }
 
-    curr->prev->next = curr->next;
-    if (curr->next != NULL){
-        curr->next->prev = curr->prev;
+    if (curr == q->head){
+        pop(q);
+    } else if (curr == q->tail){
+        spop(q);
+    } else{
+        curr->prev->next = curr->next;
+        if (curr->next != NULL){
+            curr->next->prev = curr->prev;
+        }
+        free(curr);
     }
     q->size--;
-    free(curr);
 }
 
 
