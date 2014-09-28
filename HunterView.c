@@ -13,6 +13,7 @@
 typedef struct hunterView {
     Round round;
     int score;
+    int currentPlayer;
     int healthPoint[NUM_PLAYERS];
     LocationID trail[NUM_PLAYERS][TRAIL_SIZE];
 }hunterView;
@@ -26,7 +27,8 @@ HunterView newHunterView(char *pastPlays, PlayerMessage messages[])
 
     hunterView->round = getRound(gv);
     hunterView->score = getScore(gv);
-
+    hunterView->currentPlayer = getCurrentPlayer(gv);
+    
     int i = PLAYER_LORD_GODALMING;
     for (; i <= PLAYER_DRACULA; i++){
         getHistory(gv, i, hunterView->trail[i]);
@@ -56,7 +58,7 @@ Round giveMeTheRound(HunterView currentView)
 // Get the id of current player
 PlayerID whoAmI(HunterView currentView)
 {
-    return currentView->round* NUM_PLAYERS % NUM_PLAYERS;
+    return currentView->currentPlayer
 }
 
 // Get the current score
