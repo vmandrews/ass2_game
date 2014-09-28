@@ -95,48 +95,48 @@ void giveMeTheTrail(HunterView currentView, PlayerID player,
 // What are my possible next moves (locations)
 LocationID *whereCanIgo(HunterView currentView, int *numLocations, int road, int rail,int sea)
 {
-	return whereCanTheyGo(currentView, numLocations, whoAmI(currentView), road, rail, sea);
+    return whereCanTheyGo(currentView, numLocations, whoAmI(currentView), road, rail, sea);
 }
 
 // What are the specified player's next possible moves
 LocationID *whereCanTheyGo(HunterView currentView, int *numLocations,
                            PlayerID player, int road, int rail, int sea)
 {
-	qlist q = init();
-	int i, j, z, modmove, temp, tempRail;
-	LocationID *connectRail;
-	LocationID *connect = connectedLocations((GameView)currentView, &temp, whereIs(currentView, player), player, currentView->round, road, rail, sea);
-	*numLocations = temp;
-	if (player == PLAYER_DRACULA || rail == 0){
-		free(q); return connect;
-	}
+    qlist q = init();
+    int i, j, z, modmove, temp, tempRail;
+    LocationID *connectRail;
+    LocationID *connect = connectedLocations((GameView)currentView, &temp, whereIs(currentView, player), player, currentView->round, road, rail, sea);
+    *numLocations = temp;
+    if (player == PLAYER_DRACULA || rail == 0){
+        free(q); return connect;
+    }
 
-	modmove = (currentView->round + player) % 4;
-	if (modmove == 0 || modmove == 1){
-		free(q); return connect;
-	}
+    modmove = (currentView->round + player) % 4;
+    if (modmove == 0 || modmove == 1){
+        free(q); return connect;
+    }
 
-	for (i = 0; i < temp; i++)push(q, connect[i]);
-	free(connect);
+    for (i = 0; i < temp; i++)push(q, connect[i]);
+    free(connect);
 
-	connectRail = connectedLocations((GameView)currentView, &tempRail, whereIs(currentView, player), player, currentView->round, 0, 1, 0);
-	for (i = 1; i < modmove; i++){
-		for (j = 0; j < tempRail; j++){
-			connect = connectedLocations((GameView)currentView, &temp, connectRail[j], player, currentView->round, 0, 1, 0);
-			for (z = 0; z < temp; z++)push(q, connect[z]);
-		}
-		free(connectRail);
-		connectRail = connect;
-		tempRail = temp;
-	}
+    connectRail = connectedLocations((GameView)currentView, &tempRail, whereIs(currentView, player), player, currentView->round, 0, 1, 0);
+    for (i = 1; i < modmove; i++){
+        for (j = 0; j < tempRail; j++){
+            connect = connectedLocations((GameView)currentView, &temp, connectRail[j], player, currentView->round, 0, 1, 0);
+            for (z = 0; z < temp; z++)push(q, connect[z]);
+        }
+        free(connectRail);
+        connectRail = connect;
+        tempRail = temp;
+    }
 
-	removeDuplicate(q);
-	free(connect);
-	*numLocations = q->size;
-	connect = malloc(sizeof(LocationID)*q->size);
-	for (i = 0; i < q->size; i++){
-		connect[i] = pop(q);
-	}
-	free(q);
-	return connect;
+    removeDuplicate(q);
+    free(connect);
+    *numLocations = q->size;
+    connect = malloc(sizeof(LocationID)*q->size);
+    for (i = 0; i < q->size; i++){
+        connect[i] = pop(q);
+    }
+    free(q);
+    return connect;
 }
