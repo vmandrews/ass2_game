@@ -14,11 +14,16 @@ static char *idToPlayerName(int i);
 static void printhistory(GameView gv);
 static void printConnects(GameView gv);
 void printLocationID(LocationID *connects, int num);
+void testGameView_given();
 
 int main()
 {
     testGameView_1 ();
     testGameView_TL();
+}
+
+void testGameView_given()
+{
     int i;
     GameView gv;
     
@@ -122,8 +127,6 @@ int main()
     disposeGameView(gv);
     return 0;
 }
-
-
 
 void testGameView_1 (void)
 {
