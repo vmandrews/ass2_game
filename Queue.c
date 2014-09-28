@@ -117,6 +117,7 @@ void removeDuplicate(qlist q)
 //add trap
 void pushtrap(qlist q, node *newt)
 {
+    assert(q!=NULL && newt != NULL);
     if (q->head == q->tail){
         q->head =q->tail = newt;
     } else{
@@ -129,10 +130,12 @@ void pushtrap(qlist q, node *newt)
 //remove trap
 void movetrap(qlist q, LocationID place)
 {
+    assert(q!=NULL && q->head != NULL);
     node *curr = q->head;
     if (curr == NULL)return;
     if (curr->next == NULL){
         q->head = q->tail = NULL;
+        q->size--;
         free(curr);
         return;
     }
@@ -145,6 +148,7 @@ void movetrap(qlist q, LocationID place)
     if (curr->next != NULL){
         curr->next->prev = curr->prev;
     }
+    q->size--;
     free(curr);
 }
 
@@ -152,6 +156,7 @@ void movetrap(qlist q, LocationID place)
 //0 = trap, 1 = vampire
 int trapNum(qlist tv, LocationID place)
 {
+    assert(tv!=NULL);
     int trapNo = 0;
     node *curr = tv->head;
 
@@ -166,6 +171,7 @@ int trapNum(qlist tv, LocationID place)
 //traptype 0 = trap,1 = vampire
 void updateTrap(TrapVam tv,LocationID place,int type)
 {
+    assert(tv!=NULL && tv->trap!=NULL && tv->vam!=NULL);
     if (type == 0){
         int traps = trapNum(tv->trap, place), i = 0;
         for (; i < traps; i++){
@@ -184,6 +190,7 @@ void updateTrap(TrapVam tv,LocationID place,int type)
 //type 0 = hunter encounter, 1 = vampire place, 2 = vampire mature
 void updateVam(TrapVam tv, LocationID place, int type)
 {
+    assert(tv!=NULL && tv->trap!=NULL && tv->vam!=NULL);
     if (type == 0){
         int traps = trapNum(tv->vam, place), i = 0;
         for (; i < traps; i++){
@@ -202,6 +209,7 @@ void updateVam(TrapVam tv, LocationID place, int type)
 
 void freeTravm(TrapVam ts)
 {
+    assert(ts!=NULL);
     node *curr = ts->trap->head;
     node *temp = curr;
     while (curr != NULL){
