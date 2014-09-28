@@ -61,7 +61,7 @@ void Dracula(GameView gv, qlist q, char *play)
         push(q, HIDE);
     }else if (play[1] == 'D' && isdigit(play[2])){
         LocationID curloc = peek(q, play[2] - '0');
-        if (curloc == TELEPORT){
+        if (curloc == TELEPORT || curloc == CASTLE_DRACULA){
             gv->healthPoints[PLAYER_DRACULA] += LIFE_GAIN_CASTLE_DRACULA;
         }else if (curloc == HIDE){
             curloc = (play[2] - '0' == 1) ? peek(q, 2) : peek(q, 1);
