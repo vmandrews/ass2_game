@@ -55,7 +55,7 @@ void Hunter(GameView gv, qlist q, char *plays, PlayerID player)
 void Dracula(GameView gv, qlist q, char *play)
 {
     if (play[1] == 'H' && play[2] == 'I'){
-        if (peek(q, 1) == CASTLE_DRACULA)
+        if (peek(q, 1) == CASTLE_DRACULA || peek(q,1) == TELEPORT)
             gv->healthPoints[PLAYER_DRACULA] += LIFE_GAIN_CASTLE_DRACULA;
         if (isNotEmpty(q) == 6)pop(q);
         push(q, HIDE);
