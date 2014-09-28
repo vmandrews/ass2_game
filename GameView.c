@@ -15,6 +15,7 @@
 typedef struct gameView {
     int round;
     int score; 
+    int currentPlayer;
     int healthPoints[NUM_PLAYERS];
     LocationID playerLocations[NUM_PLAYERS][TRAIL_SIZE];
 }gameView;
@@ -145,6 +146,7 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
     for (; i < NUM_PLAYERS; i++)history[i] = init();
     newGame(gv,history);
     gv->round = (strlen(pastPlays)+1) / (TURN_LEN * NUM_PLAYERS);
+    gv->currentPlayer = ((strlen(pastPlays)+1)/TURN_LEN) % NUM_PLAYERS;
 
     TrapVam traps = malloc(sizeof(trapVam));
     traps->trap = init();
@@ -189,7 +191,7 @@ Round getRound(GameView currentView)
 // Get the id of current player - ie whose turn is it?
 PlayerID getCurrentPlayer(GameView currentView)
 {
-    return currentView->round * NUM_PLAYERS % NUM_PLAYERS;
+    return currentView->currentPlayer;
 }
 // Get the current score
 int getScore(GameView currentView)
