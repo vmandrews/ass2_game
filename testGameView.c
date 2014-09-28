@@ -9,7 +9,7 @@
 #define MAX_STRING 14640
 
 void testGameView_1 (void);
-void testGamView_TL();
+void testGameView_TL();
 static char *idToPlayerName(int i);
 static void printhistory(GameView gv);
 static void printConnects(GameView gv);
