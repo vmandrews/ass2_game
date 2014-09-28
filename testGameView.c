@@ -7,6 +7,10 @@
 #include "GameView.h"
 
 void testGameView_1 (void);
+void testGamView_TL();
+static char *idToPlayerName(int i);
+static void printhistory(GameView gv);
+static void printConnects(GameView gv);
 
 int main()
 {
@@ -268,3 +272,107 @@ when the rail move is to a non-adjacent city the Hunter does not actually enter 
     disposeGameView(new);
 }
 
+//takes in playerID and returns name of player
+static char *idToPlayerName(int i)
+{
+    char *name = malloc(sizeof(char)* 15);
+    if (i == 0)return "LORD GODALMING";
+    if (i == 1)return "DR_SEWARD";
+    if (i == 2)return "VAN_HELSING";
+    if (i == 3)return "MINA_HARKER";
+    if (i == 4)return "DRACULA";
+    return name;
+}
+
+//prints the trail of each player
+static void printhistory(GameView gv)
+{
+    int i, j;
+    LocationID history[TRAIL_SIZE];
+
+    for (i = 0; i < NUM_PLAYERS; i++){
+        printf("Player %s's history: ", idToPlayerName(i));
+        getHistory(gv, i, history);
+        if (history[0] >= 0 && history[0] <= 70){
+            printf("%s", idToName(history[0]));
+        }
+        else printf("%d", history[0]);
+
+        for (j = 1; j < TRAIL_SIZE; j++){
+            if (history[j] >= 0 && history[j] <= 70){
+                printf("->%s", idToName(history[j]));
+            }
+            else printf("->%d", history[j]);
+        }
+        printf("\n");
+    }
+}
+
+//prints connections
+static void printConnects(GameView gv)
+{
+    int num,i,j;
+    for (i = 0; i < NUM_PLAYERS; i++){
+        LocationID place = getLocation(gv, i);
+        if (place < 0 || place > 70){
+            printf("%s is not at a valid location: %d\n",idToPlayerName(i),place);
+            continue;
+        }
+        LocationID *connects = connectedLocations(gv, &num, place, i, getRound(gv), 1, 1, 1);
+        printf("%s is at %s with connections to:\n",idToPlayerName(i), idToName(place));
+        for (j = 0; j < num; j++){
+            printf("%s\n",idToName(connects[j]));
+        }
+        free(connects);
+    }
+}
+
+void testGameView_TL()
+{
+    char pastPlay[MAX_STRING] = {""};
+    //round 0
+    PlayerMessage message[] = {"Hi"};
+    puts("test input string = \"GMU....\"");
+    strcat(pastPlay, "GMU....");
+    GameView gv = newGameView(pastPlay, message);
+
+    puts("basic setup checks");
+    assert(getCurrentPlayer(gv) == PLAYER_DR_SEWARD);
+    assert(getRound(gv) == 0);
+    assert(getLocation(gv, PLAYER_LORD_GODALMING) == MUNICH);
+    assert(getLocation(gv, PLAYER_DRACULA) == UNKNOWN_LOCATION);
+    assert(getLocation(gv, PLAYER_MINA_HARKER) == UNKNOWN_LOCATION);
+    assert(getHealth(gv, PLAYER_DRACULA) == GAME_START_BLOOD_POINTS);
+    assert(getHealth(gv, PLAYER_LORD_GODALMING) == GAME_START_HUNTER_LIFE_POINTS);
+    assert(getHealth(gv, PLAYER_MINA_HARKER) == GAME_START_HUNTER_LIFE_POINTS);
+    assert(getHealth(gv, PLAYER_DR_SEWARD) == GAME_START_HUNTER_LIFE_POINTS);
+    assert(getHealth(gv, PLAYER_VAN_HELSING) == GAME_START_HUNTER_LIFE_POINTS);
+
+    puts("History log check");
+    LocationID history[TRAIL_SIZE];
+    getHistory(gv, PLAYER_DRACULA, history);
+    assert(history[0] == UNKNOWN_LOCATION);
+    assert(history[1] == UNKNOWN_LOCATION);
+    getHistory(gv, PLAYER_LORD_GODALMING, history);
+    assert(history[0] == MUNICH);
+    assert(history[1] == UNKNOWN_LOCATION);
+    assert(history[2] == UNKNOWN_LOCATION);
+    getHistory(gv, PLAYER_DR_SEWARD, history);
+    assert(history[0] == UNKNOWN_LOCATION);
+    assert(history[1] == UNKNOWN_LOCATION);
+
+    puts("passed");
+    disposeGameView(gv);
+
+    strcat(pastPlay, " SMR.... HPA.... MBR....");
+    printf("\ntest string \"%s\"\n", pastPlay);
+    gv = newGameView(pastPlay,message);
+    printhistory(gv);
+    printConnects(gv);
+
+    strcat(pastPlay, " DST....");
+    printf("\ntest string \"%s\"\n", pastPlay);
+    gv = newGameView(pastPlay, message);
+    printhistory(gv);
+    printConnects(gv);
+}
