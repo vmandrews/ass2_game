@@ -19,11 +19,15 @@ qlist init()
 
 int isNotEmpty(qlist q)
 {
+    assert(q!=NULL);
     return q->size;
 }
 
 LocationID spop(qlist q)
 {
+    assert(q!=NULL);
+    assert(q->tail!=NULL);
+
     LocationID dest = q->tail->playerloc;
     node *todel = q->tail;
     if (!todel)return -2;
@@ -40,6 +44,8 @@ LocationID spop(qlist q)
 
 LocationID pop(qlist q)
 {
+    assert(q!=NULL);
+    assert(q->head!=NULL);
     node *todel = q->head;
     LocationID dest = q->head->playerloc;
     if (!q->head)return -2;
@@ -56,6 +62,7 @@ LocationID pop(qlist q)
 
 LocationID peek(qlist q, int n)
 {
+    assert(q!=NULL);
     if (q->tail == NULL)return -2;
     if (n == 1)return q->tail->playerloc;
 
@@ -67,6 +74,7 @@ LocationID peek(qlist q, int n)
 
 void push(qlist q, LocationID it)
 {
+    assert(q!=NULL);
     node *n = malloc(sizeof(node));
     n->playerloc = it; n->next = NULL; n->prev = NULL;
     if (q->size == 0){
