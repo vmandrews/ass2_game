@@ -11,6 +11,7 @@ void testGamView_TL();
 static char *idToPlayerName(int i);
 static void printhistory(GameView gv);
 static void printConnects(GameView gv);
+void printLocationID(LocationID *connects, int num);
 
 int main()
 {
@@ -272,8 +273,14 @@ when the rail move is to a non-adjacent city the Hunter does not actually enter 
     disposeGameView(new);
 }
 
+/*
+   "GBE.... SBR.... HLO.... MCA.... DC?.V.."
+   "GBE.... SBR.... HLO.... MCA.... DSJ.V.. GSJVD.."
+   G S H M D
+*/
+
 //takes in playerID and returns name of player
-static char *idToPlayerName(int i)
+char *idToPlayerName(int i)
 {
     char *name = malloc(sizeof(char)* 15);
     if (i == 0)return "LORD GODALMING";
@@ -283,9 +290,19 @@ static char *idToPlayerName(int i)
     if (i == 4)return "DRACULA";
     return name;
 }
+void printGameStatus(GameView gv)
+{
+    int i;
+    printf("current round is %d and currentPlayer is %s\n", getRound(gv),
+                                    idToPlayerName(getCurrentPlayer(gv)));
+    printf("Current score is %d\n", getScore(gv));
+    for (i = 0; i < NUM_PLAYERS; i++){
+        printf("%s now on %d health\n", idToPlayerName(i), getHealth(gv, i));
+    }
+}
 
 //prints the trail of each player
-static void printhistory(GameView gv)
+void printhistory(GameView gv)
 {
     int i, j;
     LocationID history[TRAIL_SIZE];
@@ -300,18 +317,27 @@ static void printhistory(GameView gv)
 
         for (j = 1; j < TRAIL_SIZE; j++){
             if (history[j] >= 0 && history[j] <= 70){
-                printf("->%s", idToName(history[j]));
+                printf("<-%s", idToName(history[j]));
             }
-            else printf("->%d", history[j]);
+            else printf("<-%d", history[j]);
         }
         printf("\n");
     }
 }
 
-//prints connections
-static void printConnects(GameView gv)
+
+void printLocationID(LocationID *connects, int num)
 {
-    int num,i,j;
+    int j;
+    for (j = 0; j < num - 1; j++){
+        printf("%s\n", idToName(connects[j]));
+    }
+}
+
+//prints connections
+void printConnects(GameView gv)
+{
+    int num,i;
     for (i = 0; i < NUM_PLAYERS; i++){
         LocationID place = getLocation(gv, i);
         if (place < 0 || place > 70){
@@ -320,9 +346,7 @@ static void printConnects(GameView gv)
         }
         LocationID *connects = connectedLocations(gv, &num, place, i, getRound(gv), 1, 1, 1);
         printf("%s is at %s with connections to:\n",idToPlayerName(i), idToName(place));
-        for (j = 0; j < num; j++){
-            printf("%s\n",idToName(connects[j]));
-        }
+        printLocationID(connects, num);
         free(connects);
     }
 }
@@ -369,10 +393,106 @@ void testGameView_TL()
     gv = newGameView(pastPlay,message);
     printhistory(gv);
     printConnects(gv);
+    disposeGameView(gv);
 
     strcat(pastPlay, " DST....");
     printf("\ntest string \"%s\"\n", pastPlay);
     gv = newGameView(pastPlay, message);
+    assert(getRound(gv) == 1);
     printhistory(gv);
     printConnects(gv);
+    disposeGameView(gv);
+
+    strcat(pastPlay, " GSTD... SPA.... HSTD... MHA....");
+    printf("\ntest string \"%s\"\n", pastPlay);
+    gv = newGameView(pastPlay, message);
+    assert(getHealth(gv, PLAYER_DRACULA) == GAME_START_BLOOD_POINTS - 2 * LIFE_LOSS_HUNTER_ENCOUNTER);
+    assert(getHealth(gv, PLAYER_LORD_GODALMING) == GAME_START_HUNTER_LIFE_POINTS - LIFE_LOSS_DRACULA_ENCOUNTER);
+    assert(getHealth(gv, PLAYER_VAN_HELSING) == GAME_START_HUNTER_LIFE_POINTS - LIFE_LOSS_DRACULA_ENCOUNTER);
+    assert(getCurrentPlayer(gv) == PLAYER_DRACULA);
+    assert(getRound(gv) == 1);
+    printGameStatus(gv);
+    printhistory(gv);
+    printConnects(gv);
+
+    strcat(pastPlay, " DZUT...");
+    printf("\ntest string \"%s\"\n", pastPlay);
+    gv = newGameView(pastPlay, message);
+    printGameStatus(gv);
+    printhistory(gv);
+    printConnects(gv);
+    disposeGameView(gv);
+
+    //H dies this round, he is originally on 5 health due to Dracula encounter
+    //then he steps onto the trap so -2
+    //then encounter dracula -4 and dies
+    //dracula teleports to castle and increases health by 10 so health should remain unchange
+    strcat(pastPlay, " GBU.... SBU.... HZUTD.. MLI.... DTP....");
+    printf("\ntest string \"%s\"\n", pastPlay);
+    gv = newGameView(pastPlay, message);
+    assert(getScore(gv) == GAME_START_SCORE - getRound(gv) - SCORE_LOSS_HUNTER_HOSPITAL);
+    assert(getHealth(gv, PLAYER_DRACULA) == 20);
+    assert(getHealth(gv, PLAYER_VAN_HELSING) == 9);
+    printGameStatus(gv);
+    printhistory(gv);
+    printConnects(gv);
+
+    int num;
+    puts("\nConnection test Dracula Castle for Hunter");
+    LocationID *connects = connectedLocations(gv, &num, CASTLE_DRACULA, PLAYER_LORD_GODALMING, getRound(gv), 1, 1, 1);
+    printf("%s is at %s with connections to:\n", idToPlayerName(PLAYER_LORD_GODALMING), idToName(CASTLE_DRACULA));
+    printLocationID(connects, num);
+    free(connects);
+
+    puts("\nConnection test Milan for Dracula");
+    connects = connectedLocations(gv, &num, MILAN, PLAYER_DRACULA, getRound(gv), 1, 1, 1);
+    printf("%s is at %s with connections to:\n", idToPlayerName(PLAYER_DRACULA), idToName(MILAN));
+    printLocationID(connects, num);
+
+    puts("\nConnection test Milan for Hunter");
+    connects = connectedLocations(gv, &num, MILAN, PLAYER_LORD_GODALMING, getRound(gv), 1, 1, 1);
+    printf("%s is at %s with connections to:\n", idToPlayerName(PLAYER_LORD_GODALMING), idToName(MILAN));
+    printLocationID(connects, num);
+    free(connects);
+    disposeGameView(gv);
+
+    strcat(pastPlay, " GST.... SLE.... HZA.... MHA.... DHITVV.");
+    printf("\ntest string \"%s\"\n", pastPlay);
+    gv = newGameView(pastPlay, message);
+    printGameStatus(gv);
+    printhistory(gv);
+    printConnects(gv);
+
+    strcat(pastPlay, " GCFTTTT SEDTTTT HGATTTT MCGTTTT DD2....");
+    printf("\ntest string \"%s\"\n", pastPlay);
+    gv = newGameView(pastPlay, message);
+    printGameStatus(gv);
+    printhistory(gv);
+    printConnects(gv);
+
+    strcat(pastPlay," GVI.... SVA.... HTS....");
+    printf("\ntest string \"%s\"\n", pastPlay);
+    gv = newGameView(pastPlay, message);
+    printGameStatus(gv);
+    printhistory(gv);
+
+    strcat(pastPlay, " MCD.... DCD.VV. GSJ....");
+    printf("\ntest string \"%s\"\n", pastPlay);
+    gv = newGameView(pastPlay, message);
+    printGameStatus(gv);
+    printhistory(gv);
+    printConnects(gv);
+
+    strcat(pastPlay, " SSR.... HPR.... MPL.... DC?T.M.");
+    printf("\ntest string \"%s\"\n", pastPlay);
+    gv = newGameView(pastPlay, message);
+    printGameStatus(gv);
+    printhistory(gv);
+    printConnects(gv);
+
+    strcat(pastPlay, " SSR.... HPR.... MPL.... DD2T.V.");
+    printf("\ntest string \"%s\"\n", pastPlay);
+    gv = newGameView(pastPlay, message);
+    printGameStatus(gv);
+    printhistory(gv);
 }
