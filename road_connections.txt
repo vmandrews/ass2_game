@@ -1,0 +1,301 @@
+Adriatic Sea Adriatic Sea
+Alicante Saragossa
+Alicante Madrid
+Alicante Granada
+Alicante Alicante
+Amsterdam Cologne
+Amsterdam Brussels
+Amsterdam Amsterdam
+Athens Valona
+Athens Athens
+Atlantic Ocean Atlantic Ocean
+Barcelona Toulouse
+Barcelona Saragossa
+Barcelona Barcelona
+Bari Rome
+Bari Naples
+Bari Bari
+Bay of Biscay Bay of Biscay
+Belgrade Szeged
+Belgrade St Joseph and St Marys
+Belgrade Sofia
+Belgrade Sarajevo
+Belgrade Klausenburg
+Belgrade Bucharest
+Belgrade Belgrade
+Berlin Prague
+Berlin Leipzig
+Berlin Hamburg
+Berlin Berlin
+Black Sea Black Sea
+Bordeaux Toulouse
+Bordeaux Saragossa
+Bordeaux Nantes
+Bordeaux Clermont-Ferrand
+Bordeaux Bordeaux
+Brussels Strasbourg
+Brussels Paris
+Brussels Le Havre
+Brussels Cologne
+Brussels Amsterdam
+Brussels Brussels
+Bucharest Sofia
+Bucharest Klausenburg
+Bucharest Galatz
+Bucharest Constanta
+Bucharest Belgrade
+Bucharest Bucharest
+Budapest Zagreb
+Budapest Vienna
+Budapest Szeged
+Budapest Klausenburg
+Budapest Budapest
+Cadiz Madrid
+Cadiz Lisbon
+Cadiz Granada
+Cadiz Cadiz
+Cagliari Cagliari
+Castle Dracula Klausenburg
+Castle Dracula Galatz
+Castle Dracula Castle Dracula
+Clermont-Ferrand Toulouse
+Clermont-Ferrand Paris
+Clermont-Ferrand Nantes
+Clermont-Ferrand Marseilles
+Clermont-Ferrand Geneva
+Clermont-Ferrand Bordeaux
+Clermont-Ferrand Clermont-Ferrand
+Cologne Strasbourg
+Cologne Leipzig
+Cologne Hamburg
+Cologne Frankfurt
+Cologne Brussels
+Cologne Amsterdam
+Cologne Cologne
+Constanta Varna
+Constanta Galatz
+Constanta Bucharest
+Constanta Constanta
+Dublin Galway
+Dublin Dublin
+Edinburgh Manchester
+Edinburgh Edinburgh
+English Channel English Channel
+Florence Venice
+Florence Rome
+Florence Genoa
+Florence Florence
+Frankfurt Strasbourg
+Frankfurt Nuremburg
+Frankfurt Leipzig
+Frankfurt Cologne
+Frankfurt Frankfurt
+Galatz Klausenburg
+Galatz Constanta
+Galatz Castle Dracula
+Galatz Bucharest
+Galatz Galatz
+Galway Dublin
+Galway Galway
+Geneva Zurich
+Geneva Strasbourg
+Geneva Paris
+Geneva Marseilles
+Geneva Clermont-Ferrand
+Geneva Geneva
+Genoa Venice
+Genoa Milan
+Genoa Marseilles
+Genoa Florence
+Genoa Genoa
+Granada Madrid
+Granada Cadiz
+Granada Alicante
+Granada Granada
+Hamburg Leipzig
+Hamburg Cologne
+Hamburg Berlin
+Hamburg Hamburg
+Ionian Sea Ionian Sea
+Irish Sea Irish Sea
+Klausenburg Szeged
+Klausenburg Galatz
+Klausenburg Castle Dracula
+Klausenburg Budapest
+Klausenburg Bucharest
+Klausenburg Belgrade
+Klausenburg Klausenburg
+Le Havre Paris
+Le Havre Nantes
+Le Havre Brussels
+Le Havre Le Havre
+Leipzig Nuremburg
+Leipzig Hamburg
+Leipzig Frankfurt
+Leipzig Cologne
+Leipzig Berlin
+Leipzig Leipzig
+Lisbon Santander
+Lisbon Madrid
+Lisbon Cadiz
+Lisbon Lisbon
+Liverpool Swansea
+Liverpool Manchester
+Liverpool Liverpool
+London Swansea
+London Plymouth
+London Manchester
+London London
+Madrid Saragossa
+Madrid Santander
+Madrid Lisbon
+Madrid Granada
+Madrid Cadiz
+Madrid Alicante
+Madrid Madrid
+Manchester London
+Manchester Liverpool
+Manchester Edinburgh
+Manchester Manchester
+Marseilles Zurich
+Marseilles Toulouse
+Marseilles Milan
+Marseilles Genoa
+Marseilles Geneva
+Marseilles Clermont-Ferrand
+Marseilles Marseilles
+Mediterranean Sea Mediterranean Sea
+Milan Zurich
+Milan Venice
+Milan Munich
+Milan Marseilles
+Milan Genoa
+Milan Milan
+Munich Zurich
+Munich Zagreb
+Munich Vienna
+Munich Venice
+Munich Strasbourg
+Munich Nuremburg
+Munich Milan
+Munich Munich
+Nantes Paris
+Nantes Le Havre
+Nantes Clermont-Ferrand
+Nantes Bordeaux
+Nantes Nantes
+Naples Rome
+Naples Bari
+Naples Naples
+North Sea North Sea
+Nuremburg Strasbourg
+Nuremburg Prague
+Nuremburg Munich
+Nuremburg Leipzig
+Nuremburg Frankfurt
+Nuremburg Nuremburg
+Paris Strasbourg
+Paris Nantes
+Paris Le Havre
+Paris Geneva
+Paris Clermont-Ferrand
+Paris Brussels
+Paris Paris
+Plymouth London
+Plymouth Plymouth
+Prague Vienna
+Prague Nuremburg
+Prague Berlin
+Prague Prague
+Rome Naples
+Rome Florence
+Rome Bari
+Rome Rome
+Salonica Valona
+Salonica Sofia
+Salonica Salonica
+Santander Saragossa
+Santander Madrid
+Santander Lisbon
+Santander Santander
+Saragossa Toulouse
+Saragossa Santander
+Saragossa Madrid
+Saragossa Bordeaux
+Saragossa Barcelona
+Saragossa Alicante
+Saragossa Saragossa
+Sarajevo Zagreb
+Sarajevo Valona
+Sarajevo St Joseph and St Marys
+Sarajevo Sofia
+Sarajevo Belgrade
+Sarajevo Sarajevo
+Sofia Varna
+Sofia Valona
+Sofia Sarajevo
+Sofia Salonica
+Sofia Bucharest
+Sofia Belgrade
+Sofia Sofia
+Strasbourg Zurich
+Strasbourg Paris
+Strasbourg Nuremburg
+Strasbourg Munich
+Strasbourg Geneva
+Strasbourg Frankfurt
+Strasbourg Cologne
+Strasbourg Brussels
+Strasbourg Strasbourg
+St Joseph and St Marys Zagreb
+St Joseph and St Marys Szeged
+St Joseph and St Marys Sarajevo
+St Joseph and St Marys Belgrade
+St Joseph and St Marys St Joseph and St Marys
+Swansea London
+Swansea Liverpool
+Swansea Swansea
+Szeged Zagreb
+Szeged St Joseph and St Marys
+Szeged Klausenburg
+Szeged Budapest
+Szeged Belgrade
+Szeged Szeged
+Toulouse Saragossa
+Toulouse Marseilles
+Toulouse Clermont-Ferrand
+Toulouse Bordeaux
+Toulouse Barcelona
+Toulouse Toulouse
+Tyrrhenian Sea Tyrrhenian Sea
+Valona Sofia
+Valona Sarajevo
+Valona Salonica
+Valona Athens
+Valona Valona
+Varna Sofia
+Varna Constanta
+Varna Varna
+Venice Munich
+Venice Milan
+Venice Genoa
+Venice Florence
+Venice Venice
+Vienna Zagreb
+Vienna Prague
+Vienna Munich
+Vienna Budapest
+Vienna Vienna
+Zagreb Vienna
+Zagreb Szeged
+Zagreb St Joseph and St Marys
+Zagreb Sarajevo
+Zagreb Munich
+Zagreb Budapest
+Zagreb Zagreb
+Zurich Strasbourg
+Zurich Munich
+Zurich Milan
+Zurich Marseilles
+Zurich Geneva
+Zurich Zurich

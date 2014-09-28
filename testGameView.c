@@ -6,6 +6,8 @@
 #include <string.h>
 #include "GameView.h"
 
+#define MAX_STRING 14640
+
 void testGameView_1 (void);
 void testGamView_TL();
 static char *idToPlayerName(int i);
@@ -16,7 +18,7 @@ void printLocationID(LocationID *connects, int num);
 int main()
 {
     testGameView_1 ();
-
+    testGameView_TL();
     int i;
     GameView gv;
     
@@ -231,7 +233,6 @@ void testGameView_1 (void)
     
     FILE *output;
     output = fopen("road_connections.txt", "w+");
-    fprintf(output,"");
     fclose(output);
     int x;
     
