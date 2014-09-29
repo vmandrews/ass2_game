@@ -214,6 +214,20 @@ void testGameView_1 (void)
     assert(i == 60); // Castle Dracula for three turns (+20) and 1 encounter (-10)
     printf("passed\n");
 
+    printf("testing traps...\n");
+    new = newGameView("GAL.... SAL.... HAL.... MAL.... DAST... "
+                    "GAL.... SAL.... HAL.... MAL.... DAST... "
+                    "GAL.... SAL.... HAL.... MAL.... DAST... "
+                    "GAL.... SAL.... HAL.... MAL.... DAST... "
+                    "GAST... SAL.... HAL.... MAL.... DAT.... "
+                    "GAST... SAL.... HAL.... MAL.... DAT.... "
+                    "GAST... SAL.... HAL.... MAL.... DAT.... "
+                    "GAST... SAL.... HAL.... MAL.... DAT....", messages);
+    i = getHealth(new, PLAYER_LORD_GODALMING);
+    printf("%d health\n",i); 
+    assert(i == 3); // Lord Godalming encounters three traps (maximum traps is three)
+    printf("passed\n");
+
     printf("testing get score function...\n");
     char past_play_string[200] = "GAL.... SBI.... HBI.... MBI.... DASTV..";
     new = newGameView(past_play_string, messages);
@@ -232,10 +246,11 @@ void testGameView_1 (void)
     int size;
     i = ADRIATIC_SEA;
     LocationID *connected;
+    new = newGameView("", messages); // new game
     printf("testing road connections...\n");
-    
     FILE *output;
     output = fopen("road_connections.txt", "w+");
+    fprintf(output,"");
     fclose(output);
     int x;
     
@@ -249,17 +264,39 @@ void testGameView_1 (void)
             fprintf(output, " ");
             fputs(location_string, output);
             fprintf(output, "\n");
-            fclose(output); 
+            fclose(output);
         }
         i++;
         x = 0;
     }
+    printf("... output file created\n");
     
+    printf("testing boat connections...\n");
+    output = fopen("boat_connections.txt", "w+");
+    fprintf(output,"");
+    fclose(output);
+    i = ADRIATIC_SEA;
+    
+    while(i < NUM_MAP_LOCATIONS) {
+        connected = connectedLocations(new, &size, i, PLAYER_LORD_GODALMING, 0, 0, 0, 1);
+        char *from_string = idToName(i);
+        for(x = 0; x < size; x++){
+            output = fopen("boat_connections.txt", "a");
+            char *location_string = idToName(connected[x]);
+            fputs(from_string, output);
+            fprintf(output, " ");
+            fputs(location_string, output);
+            fprintf(output, "\n");
+            fclose(output);
+        }
+        i++;
+        x = 0;
+    }
+    printf("... output file created\n");
 
 
 
 /*
-
 Road moves: a Hunter can move to any city directly connected to the current city by a road.
 Sea moves: a Hunter can move from a port to an adjacent sea, or a sea to an adjacent sea, or a sea to an adjacent port city.
 Rail moves: The maximum distance that can be moved via rail is determined by the sum of the round number (0..366) and the Hunter number (0..3)
@@ -268,7 +305,6 @@ sum mod 4 is 1: Hunters may move to any city adjacent to the current city via a 
 sum mod 4 is 2: Hunters may move to any city adjacent to the current city via a rail link, or any city adjacent via rail to such a city.
 sum mod 4 is 3: Hunters may move to any city adjacent to the current city via a rail link, or any city adjacent via rail to such a city, or any city adjacent via rail to such a city. (IE move up to three steps by rail)
 when the rail move is to a non-adjacent city the Hunter does not actually enter the intermediate cities, so any encounters there are not encountered etc
-
 */
 
 
@@ -276,6 +312,13 @@ when the rail move is to a non-adjacent city the Hunter does not actually enter 
 
     disposeGameView(new);
 }
+
+
+
+
+
+
+
 
 /*
    "GBE.... SBR.... HLO.... MCA.... DC?.V.."
