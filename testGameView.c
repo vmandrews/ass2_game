@@ -329,10 +329,10 @@ void testGameView_1 (void)
     assert(connected[2] == ROME);
     i = 2; //round 2 + Player G (0) = sum (2) (THEREFORE sum%4 == 2) 2 movements permitted
     connected = connectedLocations(new, &size, BARI, PLAYER_LORD_GODALMING, i, 0, 1, 0);
-    assert(size == 2);
+    assert(size == 3);
     assert(connected[0] == NAPLES);
-    //assert(connected[1] == ROME);
-    assert(connected[1] == BARI);
+    assert(connected[1] == ROME);
+    assert(connected[2] == BARI);
     printf("passed\n");
 
     free(connected);
