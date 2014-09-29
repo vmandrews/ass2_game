@@ -117,8 +117,8 @@ LocationID whereIs(DracView currentView, PlayerID player)
 void lastMove(DracView currentView, PlayerID player,
                  LocationID *start, LocationID *end)
 {
-    start = &(currentView->trail[player][1]);
-    end = &(currentView->trail[player][0]);
+    *start = (currentView->trail[player][1]);
+    *end = (currentView->trail[player][0]);
 }
 
 // Find out what minions are placed at the specified location
