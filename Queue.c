@@ -154,8 +154,8 @@ void movetrap(qlist q, LocationID place)
             curr->next->prev = curr->prev;
         }
         free(curr);
+        q->size--;
     }
-    q->size--;
 }
 
 
