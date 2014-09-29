@@ -236,15 +236,11 @@ void filterD(TrapVam connect, Round round, PlayerID player)
     }
 }
 
-//// Functions that query the map to find information about connectivity
-
-// Returns an array of LocationIDs for all directly connected locations
-
-LocationID *connectedLocations(GameView currentView, int *numLocations,
-                               LocationID from, PlayerID player, Round round,
-                               int road, int rail, int sea)
+LocationID *connecteddirectLocations(int *numLocations,
+    LocationID from, PlayerID player, Round round,
+    int road, int rail, int sea)
 {
- TrapVam connect = malloc(sizeof(trapVam));
+    TrapVam connect = malloc(sizeof(trapVam));
     Map g = newMap();
     int boolType[] = { road, rail, sea };
 
@@ -252,7 +248,7 @@ LocationID *connectedLocations(GameView currentView, int *numLocations,
     connect->vam = init(); //  this q stores the type of transport
 
     int len = connections(g, from, boolType);
-    LocationID* places = neighbor(g,from,boolType,0,len);
+    LocationID* places = neighbor(g, from, boolType, 0, len);
     TransportID* types = neighbor(g, from, boolType, 1, len);
 
     int i = 0;
@@ -271,11 +267,67 @@ LocationID *connectedLocations(GameView currentView, int *numLocations,
     push(connect->trap, from);
     *numLocations = connect->trap->size;
     LocationID *tobereturn = malloc(sizeof(LocationID)*connect->trap->size);
-    
+
     for (i = 0; isNotEmpty(connect->trap); i++){
         tobereturn[i] = pop(connect->trap);
     }
 
     freeTravm(connect);
     return tobereturn;
+}
+
+//// Functions that query the map to find information about connectivity
+
+// Returns an array of LocationIDs for all directly connected locations
+void getConnect(qlist q, LocationID connects[],int len,int modmove,PlayerID player,Round round)
+{
+    LocationID *connectRail;
+    if (modmove == 0)return;
+    int railLen,j;
+    for (j = 0; j < len; j++){
+       push(q, connects[j]);
+       connectRail = connecteddirectLocations(&railLen, connects[j],player,round,0,1,0);
+       getConnect(q, connectRail, railLen, modmove - 1, player, round);
+       free(connectRail);
+    }
+}
+
+LocationID *connectedLocations(GameView currentView, int *numLocations,
+	LocationID from, PlayerID player, Round round,
+	int road, int rail, int sea)
+{
+ assert(from >= 0 && from <= 70);
+	qlist q = init();
+	int i, modmove, temp, tempRail;
+	LocationID *connectRail;
+	LocationID *connect = connecteddirectLocations(&temp,from, player, currentView->round, road, rail, sea);
+	*numLocations = temp;
+	if (player == PLAYER_DRACULA || rail == 0){
+		free(q); return connect;
+	}
+
+	modmove = (currentView->round + player) % 4;
+	if (modmove == 0 || modmove == 1){
+		free(q); return connect;
+	}
+
+	for (i = 0; i < temp; i++)push(q, connect[i]);
+	free(connect);
+
+	connectRail = connecteddirectLocations(&tempRail, from, player, currentView->round, 0, 1, 0);
+    getConnect(q, connectRail, tempRail, modmove, player, round);
+
+	removeDuplicate(q);
+	free(connectRail);
+    
+    movetrap(q, from);
+    push(q,from);
+
+	*numLocations = q->size;
+	connect = malloc(sizeof(LocationID)*q->size);
+	for (i = 0; i < *numLocations; i++){
+		connect[i] = pop(q);
+	}
+	free(q);
+	return connect;
 }
