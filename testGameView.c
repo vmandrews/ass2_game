@@ -20,6 +20,7 @@ int main()
 {
     testGameView_1 ();
     testGameView_TL();
+    return 0;
 }
 
 void testGameView_given()
@@ -125,10 +126,8 @@ void testGameView_given()
     free(edges);
     printf("passed\n");
     disposeGameView(gv);
-    return 0;
 }
 
-void testGameView_1 (void)
 void testGameView_1 (void)
 {
     GameView new;
