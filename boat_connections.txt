@@ -1,0 +1,151 @@
+Adriatic Sea Venice
+Adriatic Sea Ionian Sea
+Adriatic Sea Bari
+Adriatic Sea Adriatic Sea
+Alicante Mediterranean Sea
+Alicante Alicante
+Amsterdam North Sea
+Amsterdam Amsterdam
+Athens Ionian Sea
+Athens Athens
+Atlantic Ocean North Sea
+Atlantic Ocean Mediterranean Sea
+Atlantic Ocean Lisbon
+Atlantic Ocean Irish Sea
+Atlantic Ocean Galway
+Atlantic Ocean English Channel
+Atlantic Ocean Cadiz
+Atlantic Ocean Bay of Biscay
+Atlantic Ocean Atlantic Ocean
+Barcelona Mediterranean Sea
+Barcelona Barcelona
+Bari Adriatic Sea
+Bari Bari
+Bay of Biscay Santander
+Bay of Biscay Nantes
+Bay of Biscay Bordeaux
+Bay of Biscay Atlantic Ocean
+Bay of Biscay Bay of Biscay
+Belgrade Belgrade
+Berlin Berlin
+Black Sea Varna
+Black Sea Ionian Sea
+Black Sea Constanta
+Black Sea Black Sea
+Bordeaux Bay of Biscay
+Bordeaux Bordeaux
+Brussels Brussels
+Bucharest Bucharest
+Budapest Budapest
+Cadiz Atlantic Ocean
+Cadiz Cadiz
+Cagliari Tyrrhenian Sea
+Cagliari Mediterranean Sea
+Cagliari Cagliari
+Castle Dracula Castle Dracula
+Clermont-Ferrand Clermont-Ferrand
+Cologne Cologne
+Constanta Black Sea
+Constanta Constanta
+Dublin Irish Sea
+Dublin Dublin
+Edinburgh North Sea
+Edinburgh Edinburgh
+English Channel Plymouth
+English Channel North Sea
+English Channel London
+English Channel Le Havre
+English Channel Atlantic Ocean
+English Channel English Channel
+Florence Florence
+Frankfurt Frankfurt
+Galatz Galatz
+Galway Atlantic Ocean
+Galway Galway
+Geneva Geneva
+Genoa Tyrrhenian Sea
+Genoa Genoa
+Granada Granada
+Hamburg North Sea
+Hamburg Hamburg
+Ionian Sea Valona
+Ionian Sea Tyrrhenian Sea
+Ionian Sea Salonica
+Ionian Sea Black Sea
+Ionian Sea Athens
+Ionian Sea Adriatic Sea
+Ionian Sea Ionian Sea
+Irish Sea Swansea
+Irish Sea Liverpool
+Irish Sea Dublin
+Irish Sea Atlantic Ocean
+Irish Sea Irish Sea
+Klausenburg Klausenburg
+Le Havre English Channel
+Le Havre Le Havre
+Leipzig Leipzig
+Lisbon Atlantic Ocean
+Lisbon Lisbon
+Liverpool Irish Sea
+Liverpool Liverpool
+London English Channel
+London London
+Madrid Madrid
+Manchester Manchester
+Marseilles Mediterranean Sea
+Marseilles Marseilles
+Mediterranean Sea Tyrrhenian Sea
+Mediterranean Sea Marseilles
+Mediterranean Sea Cagliari
+Mediterranean Sea Barcelona
+Mediterranean Sea Atlantic Ocean
+Mediterranean Sea Alicante
+Mediterranean Sea Mediterranean Sea
+Milan Milan
+Munich Munich
+Nantes Bay of Biscay
+Nantes Nantes
+Naples Tyrrhenian Sea
+Naples Naples
+North Sea Hamburg
+North Sea English Channel
+North Sea Edinburgh
+North Sea Atlantic Ocean
+North Sea Amsterdam
+North Sea North Sea
+Nuremburg Nuremburg
+Paris Paris
+Plymouth English Channel
+Plymouth Plymouth
+Prague Prague
+Rome Tyrrhenian Sea
+Rome Rome
+Salonica Ionian Sea
+Salonica Salonica
+Santander Bay of Biscay
+Santander Santander
+Saragossa Saragossa
+Sarajevo Sarajevo
+Sofia Sofia
+Strasbourg Strasbourg
+St Joseph and St Marys St Joseph and St Marys
+Swansea Irish Sea
+Swansea Swansea
+Szeged Szeged
+Toulouse Toulouse
+Tyrrhenian Sea Rome
+Tyrrhenian Sea Naples
+Tyrrhenian Sea Mediterranean Sea
+Tyrrhenian Sea Ionian Sea
+Tyrrhenian Sea Genoa
+Tyrrhenian Sea Cagliari
+Tyrrhenian Sea Tyrrhenian Sea
+Valona Ionian Sea
+Valona Valona
+Varna Black Sea
+Varna Varna
+Venice Adriatic Sea
+Venice Venice
+Vienna Vienna
+Zagreb Zagreb
+Zurich Zurich

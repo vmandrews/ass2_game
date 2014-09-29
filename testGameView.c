@@ -248,7 +248,6 @@ void testGameView_1 (void)
     printf("testing road connections...\n");
     FILE *output;
     output = fopen("road_connections.txt", "w+");
-    fprintf(output,"");
     fclose(output);
     int x;
     while(i < NUM_MAP_LOCATIONS) {
@@ -270,7 +269,6 @@ void testGameView_1 (void)
     
     printf("testing boat connections...\n");
     output = fopen("boat_connections.txt", "w+");
-    fprintf(output,"");
     fclose(output);
     i = ADRIATIC_SEA;
     while(i < NUM_MAP_LOCATIONS) {
@@ -292,7 +290,6 @@ void testGameView_1 (void)
 
     printf("testing dracula cannot move to St Joseph & St Mary...\n");
     output = fopen("rail_connections.txt", "w+");
-    fprintf(output,"");
     fclose(output);
     i = ADRIATIC_SEA;
     while(i < NUM_MAP_LOCATIONS) {

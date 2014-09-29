@@ -293,41 +293,41 @@ void getConnect(qlist q, LocationID connects[],int len,int modmove,PlayerID play
 }
 
 LocationID *connectedLocations(GameView currentView, int *numLocations,
-	LocationID from, PlayerID player, Round round,
-	int road, int rail, int sea)
+    LocationID from, PlayerID player, Round round,
+    int road, int rail, int sea)
 {
  assert(from >= 0 && from <= 70);
-	qlist q = init();
-	int i, modmove, temp, tempRail;
-	LocationID *connectRail;
-	LocationID *connect = connecteddirectLocations(&temp,from, player, currentView->round, road, rail, sea);
-	*numLocations = temp;
-	if (player == PLAYER_DRACULA || rail == 0){
-		free(q); return connect;
-	}
+    qlist q = init();
+    int i, modmove, temp, tempRail;
+    LocationID *connectRail;
+    LocationID *connect = connecteddirectLocations(&temp,from, player, currentView->round, road, rail, sea);
+    *numLocations = temp;
+    if (player == PLAYER_DRACULA || rail == 0){
+        free(q); return connect;
+    }
 
-	modmove = (currentView->round + player) % 4;
-	if (modmove == 0 || modmove == 1){
-		free(q); return connect;
-	}
+    modmove = (currentView->round + player) % 4;
+    if (modmove == 0 || modmove == 1){
+        free(q); return connect;
+    }
 
-	for (i = 0; i < temp; i++)push(q, connect[i]);
-	free(connect);
+    for (i = 0; i < temp; i++)push(q, connect[i]);
+    free(connect);
 
-	connectRail = connecteddirectLocations(&tempRail, from, player, currentView->round, 0, 1, 0);
+    connectRail = connecteddirectLocations(&tempRail, from, player, currentView->round, 0, 1, 0);
     getConnect(q, connectRail, tempRail, modmove, player, round);
 
-	removeDuplicate(q);
-	free(connectRail);
+    removeDuplicate(q);
+    free(connectRail);
     
     movetrap(q, from);
     push(q,from);
 
-	*numLocations = q->size;
-	connect = malloc(sizeof(LocationID)*q->size);
-	for (i = 0; i < *numLocations; i++){
-		connect[i] = pop(q);
-	}
-	free(q);
-	return connect;
+    *numLocations = q->size;
+    connect = malloc(sizeof(LocationID)*q->size);
+    for (i = 0; i < *numLocations; i++){
+        connect[i] = pop(q);
+    }
+    free(q);
+    return connect;
 }
