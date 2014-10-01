@@ -119,6 +119,7 @@ void testDracView_given(void)
     printf("passed\n");
 }
 
+
 void testDracView_1(void)
 {
     int i;
@@ -193,7 +194,7 @@ void testDracView_1(void)
     strcat(past_play_string_1, " GJM.... SBO.... HBI.... MMU.... DAS....");
     new = newDracView(past_play_string_1, messages);
     i = giveMeTheScore(new);
-    //assert(i == 0); // no negative scores allowed
+    assert(i == 0); // no negative scores allowed
     printf("passed\n");
 
     printf("testing for where is function\n");
@@ -222,14 +223,37 @@ void testDracView_1(void)
     assert(start == UNKNOWN_LOCATION && end == GALWAY);
     printf("passed\n");
 
+    printf("testing trail...\n");
+    new = newDracView("GAST... SAST... HAS.... MAS.... DCD.... "
+                    "GBI.... SALT... HAL.... MAL.... DHI.... "
+                    "GAMD... SAMT... HAM.... MAM.... DAM.... "
+                    "GAM.... SATT... HAT.... MAT.... DED.... "
+                    "GAOT... SAO.... HAO.... MAO.... DAS.... "
+                    "GBA.... SBA.... HBA.... MBA.... DCD.... "
+                    "GBI.... SBI.... HBI.... MBI...." , messages);
+    LocationID trail[TRAIL_SIZE];
+    giveMeTheTrail(new, PLAYER_LORD_GODALMING,trail);
+    assert(trail[0] == BARI);
+    assert(trail[1] == BARCELONA);
+    assert(trail[2] == ATLANTIC_OCEAN);
+    assert(trail[3] == AMSTERDAM);
+    assert(trail[4] == AMSTERDAM);
+    assert(trail[5] == BARI);
+    printf("passed\n");
+
+    printf("testing where can I go function...\n");
+    int *connected;
+    int size = 0;
+    new = newDracView("GAS.... SAS.... HAS.... MAS.... DZA....", messages);
+    connected = whereCanIgo(new, &size, 1, 1);
+    for(i = 0; i < size; i++){ // to check none of the avilable locations is hospital 
+        assert(connected[i] != ST_JOSEPH_AND_ST_MARYS);
+    }
+    connected = whereCanIgo(new, &size, 0, 0);
+    assert(size == 1 && connected[0] == ZAGREB); // original location should always be in array
+    printf("passed\n");
+
+
+    free(connected);
     disposeDracView(new);
 }
-
-
-
-
-
-
-
-
-
