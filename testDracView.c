@@ -4,7 +4,7 @@
 #include <assert.h>
 #include <string.h>
 #include "DracView.h"
-
+#include "Places.h"
 #define LARGE_ENOUGH 13960
 
 void testDracView_1(void);
@@ -14,6 +14,7 @@ int main()
 {   
     testDracView_1();
     testDracView_given();
+	return 0;
 }
 
 void testDracView_given(void)
@@ -250,6 +251,7 @@ void testDracView_1(void)
         assert(connected[i] != ST_JOSEPH_AND_ST_MARYS);
     }
     connected = whereCanIgo(new, &size, 0, 0);
+	printf("%d,%s\n",size,idToName(connected[0]));
     assert(size == 1 && connected[0] == ZAGREB); // original location should always be in array
     printf("passed\n");
 

@@ -146,9 +146,7 @@ void giveMeTheTrail(DracView currentView, PlayerID player,
 // What are my (Dracula's) possible next moves (locations)
 LocationID *whereCanIgo(DracView currentView, int *numLocations, int road,int sea)
 {
-    int temp;
-    LocationID *connect = connectedLocations((GameView)currentView, &temp, whereIs(currentView, PLAYER_DRACULA), PLAYER_DRACULA, currentView->round, road, 0,sea);
-    return connect;
+    return whereCanTheyGo(currentView, numLocations, PLAYER_DRACULA,road,0,sea);
 }
 
 // What are the specified player's next possible moves
