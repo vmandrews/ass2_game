@@ -300,13 +300,13 @@ LocationID *connectedLocations(GameView currentView, int *numLocations,
     qlist q = init();
     int i, modmove, temp, tempRail;
     LocationID *connectRail;
-    LocationID *connect = connecteddirectLocations(&temp,from, player, currentView->round, road, rail, sea);
+    LocationID *connect = connecteddirectLocations(&temp,from, player, round, road, rail, sea);
     *numLocations = temp;
     if (player == PLAYER_DRACULA || rail == 0){
         free(q); return connect;
     }
 
-    modmove = (currentView->round + player) % 4;
+    modmove = (round + player) % 4;
     if (modmove == 0 || modmove == 1){
         free(q); return connect;
     }
@@ -314,7 +314,7 @@ LocationID *connectedLocations(GameView currentView, int *numLocations,
     for (i = 0; i < temp; i++)push(q, connect[i]);
     free(connect);
 
-    connectRail = connecteddirectLocations(&tempRail, from, player, currentView->round, 0, 1, 0);
+    connectRail = connecteddirectLocations(&tempRail, from, player, round, 0, 1, 0);
     getConnect(q, connectRail, tempRail, modmove, player, round);
 
     removeDuplicate(q);
