@@ -25,6 +25,10 @@ void Hunter(GameView gv, qlist q, char *plays, PlayerID player)
 {
     LocationID prevloc = peek(q, 1);
     LocationID currloc = abbrevToID(plays + 1);
+    
+    if(gv->healthPoints[player] == 0){
+        gv->healthPoints[player] = GAME_START_HUNTER_LIFE_POINTS; 
+    }
     if (isNotEmpty(q) == 6)pop(q);
     push(q, currloc);
     if (prevloc == currloc && gv->healthPoints[player] < GAME_START_HUNTER_LIFE_POINTS){
@@ -43,11 +47,8 @@ void Hunter(GameView gv, qlist q, char *plays, PlayerID player)
         gv->healthPoints[PLAYER_DRACULA] -= LIFE_LOSS_HUNTER_ENCOUNTER;
         gv->healthPoints[player] -= LIFE_LOSS_DRACULA_ENCOUNTER;
     }
-
     if (gv->healthPoints[player] <= 0){
-        gv->healthPoints[player] = GAME_START_HUNTER_LIFE_POINTS;
-        if (isNotEmpty(q) == 6)pop(q);
-        push(q, ST_JOSEPH_AND_ST_MARYS);
+        gv->healthPoints[player] = 0;
         gv->score -= SCORE_LOSS_HUNTER_HOSPITAL;
     }
 }
@@ -188,6 +189,7 @@ int getHealth(GameView currentView, PlayerID player)
 // Get the current location id of a given player
 LocationID getLocation(GameView currentView, PlayerID player)
 {
+    if(getHealth(currentView,player) == 0)return ST_JOSEPH_AND_ST_MARYS;
     return currentView->playerLocations[player][0];
 }
 
