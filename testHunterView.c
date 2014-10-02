@@ -6,8 +6,16 @@
 #include <string.h>
 #include "HunterView.h"
 
+void hunterViewTests_given(void);
+void hunterViewTests_1 (void);
+
 int main()
 {
+    hunterViewTests_given();
+    hunterViewTests_1 ();
+}
+
+void hunterViewTests_given(void){
     int i;
     HunterView hv;
     
@@ -107,6 +115,72 @@ int main()
     disposeHunterView(hv);
 
     printf("passed\n");
-    return 0;
 }
+
+void hunterViewTests_1 (void)
+{
+    HunterView new;
+    int i;
+
+    PlayerMessage messages[] = {""};
+    new = newHunterView("GGE.... SGE.... HGE.... MGE.... DC?....",messages);
+    printf("testing round number...\n");
+    i = giveMeTheRound(new);
+    assert(i == 1);
+    new = newHunterView("GGE.... SGE.... HGE.... MGE.... DC?.... "
+                        "GGE.... SGE.... HGE.... MGE....",messages);
+    i = giveMeTheRound(new);
+    assert(i == 1);
+    printf("passed\n");
+
+    printf("testing who am I function...\n");
+    i = whoAmI(new);
+    assert(i == PLAYER_DRACULA);
+    new = newHunterView("GGE....", messages);
+    i = whoAmI(new);
+    assert(i == PLAYER_DR_SEWARD);
+    new = newHunterView("GGE.... SGE....", messages);
+    i = whoAmI(new);
+    assert(i == PLAYER_VAN_HELSING);
+    new = newHunterView("GGE.... SGE.... HGE....", messages);
+    i = whoAmI(new);
+    assert(i == PLAYER_MINA_HARKER);
+    new = newHunterView("GGE.... SGE.... HGE.... MGE.... DC?....", messages);
+    i = whoAmI(new);
+    assert(i == PLAYER_LORD_GODALMING);
+    printf("passed\n");
+
+    printf("testing score function...\n");
+    new = newHunterView("GGE.... SGE.... HGE.... MGE.... DC?....", messages);
+    i = giveMeTheScore(new);
+    assert(i == 365);
+    new = newHunterView("GGE.... SGE.... HGE.... MGE....", messages);
+    i = giveMeTheScore(new);
+    assert(i == 366);
+    new = newHunterView("GGET... SGE.... HGE.... MGE.... DC?.... "
+                        "GBAT... SGE.... HGE.... MGE.... DC?.... "
+                        "GGET... SGE.... HGE.... MGE.... DC?.... "
+                        "GBAT... SGE.... HGE.... MGE.... DC?.... "
+                        "GGET... SGE.... HGE.... MGE.... DC?.... "
+                        "GGE.... SGE.... HGE.... MGE....",messages);
+    i = giveMeTheScore(new);
+    assert(i == 355); //hunter sent to hospital (-6) and 5 dracula turns (-5)
+    printf("passed\n");
+
+
+    printf("passed\n");
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
