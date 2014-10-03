@@ -189,6 +189,7 @@ int getHealth(GameView currentView, PlayerID player)
 // Get the current location id of a given player
 LocationID getLocation(GameView currentView, PlayerID player)
 {
+    if(getHealth(currentView,player) == 0)return ST_JOSEPH_AND_ST_MARYS;
     return currentView->playerLocations[player][0];
 }
 
