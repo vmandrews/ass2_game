@@ -9,12 +9,134 @@
 
 void testDracView_1(void);
 void testDracView_given(void);
+void testDracView_2(void);
 
 int main()
 {   
     testDracView_1();
     testDracView_given();
-	return 0;
+    testDracView_2();
+    puts("sickkkk all testing has passed");
+	 return EXIT_SUCCESS;
+}
+
+void testDracView_2(void)
+{
+
+   DracView drac;
+
+   puts("===== Testing The Fundamentals ======");
+
+   PlayerMessage messagez[] = {"420", "BlazeIt", "Erryday", ""};
+
+   drac = newDracView("GAL.... SAT.... HBE.... MGE....", messagez);
+
+   assert(!giveMeTheRound(drac)); // round is currently 0 as Dracula has yet to take a turn
+   assert(giveMeTheScore(drac) == 366); // score has not increased or decreased
+   assert(whereIs(drac,PLAYER_LORD_GODALMING) == ALICANTE);
+   assert(whereIs(drac,PLAYER_DR_SEWARD) == ATHENS);
+   assert(whereIs(drac,PLAYER_VAN_HELSING) == BELGRADE);
+   assert(whereIs(drac,PLAYER_MINA_HARKER) == GENEVA);
+   assert(whereIs(drac,PLAYER_DRACULA) == UNKNOWN_LOCATION);
+
+   disposeDracView(drac);
+
+   puts("===== Testing Score / Health ======");
+
+   drac = newDracView("GAL.... SAT.... HBE.... MGE.... DED....", messagez);
+
+   assert(giveMeTheRound(drac) == 1); // first round as Dracula has made his first move
+   assert(giveMeTheScore(drac) == 365); // when Dracula moves, score decreases by 1
+
+   assert(howHealthyIs(drac,PLAYER_DRACULA) == 40);
+   assert(howHealthyIs(drac,PLAYER_LORD_GODALMING) == 9);
+   assert(howHealthyIs(drac,PLAYER_DR_SEWARD) == 9);
+   assert(howHealthyIs(drac,PLAYER_VAN_HELSING) == 9);
+   assert(howHealthyIs(drac,PLAYER_MINA_HARKER) == 9);
+
+   disposeDracView(drac);
+
+   puts("===== Testing Multiple Turns ======");
+
+   drac = newDracView("GGO.... SGO.... HGO.... MGO.... DED.V.. "
+                      "GFL.... SMR.... HMR.... MMR.... DTP.... "
+                      "GVE.... STO.... HTO.... MTO.... DKLT... "
+                      "GVI.... SSR.... HSR.... MSR.... DBDT... "
+                      "GBDT... SSR.... HMA.... MMA.... DKL.... "
+                      "GKLT... SSR.... HSN.... MSN.... DCD..V. "
+                      "GCDD... SSR.... HSR.... MSR....", messagez);
+
+   assert(giveMeTheRound(drac) == 6); // round 7 starts when Dracula finishes his turn, which he has yet to
+   assert(giveMeTheScore(drac) == 347); // 6 turns have passed and one vampire has matured
+   assert(howHealthyIs(drac,PLAYER_DRACULA) == 50); // 40 + 10 (teleport scroll back to homebase) + 10 (waled back to homebase) - 10 (confrontation with Lord Godalming)
+   assert(howHealthyIs(drac,PLAYER_LORD_GODALMING) == 1); // Loss of 8 health = Encounter with Dracula (4) and two traps (4)
+   assert(howHealthyIs(drac,PLAYER_DR_SEWARD) == 9); // Health cannot go above 9 even after resting
+   assert(howHealthyIs(drac,PLAYER_VAN_HELSING) == 9);
+   assert(howHealthyIs(drac,PLAYER_MINA_HARKER) == 9);
+
+   LocationID goldamingPath[TRAIL_SIZE];
+   giveMeTheTrail(drac,PLAYER_LORD_GODALMING,goldamingPath);
+   assert(goldamingPath[0] == CASTLE_DRACULA);
+   assert(goldamingPath[1] == KLAUSENBURG);
+   assert(goldamingPath[2] == BUDAPEST);
+   assert(goldamingPath[3] == VIENNA);
+   assert(goldamingPath[4] == VENICE);
+   assert(goldamingPath[5] == FLORENCE);
+
+   LocationID sewardPath[TRAIL_SIZE];
+   giveMeTheTrail(drac,PLAYER_DR_SEWARD,sewardPath);
+   assert(sewardPath[0] == SARAGOSSA);
+   assert(sewardPath[1] == SARAGOSSA);
+   assert(sewardPath[2] == SARAGOSSA);
+   assert(sewardPath[3] == SARAGOSSA);
+   assert(sewardPath[4] == TOULOUSE);
+   assert(sewardPath[5] == MARSEILLES);
+
+   LocationID helsingPath[TRAIL_SIZE];
+   giveMeTheTrail(drac,PLAYER_VAN_HELSING,helsingPath);
+   assert(helsingPath[0] == SARAGOSSA);
+   assert(helsingPath[1] == SANTANDER);
+   assert(helsingPath[2] == MADRID);
+   assert(helsingPath[3] == SARAGOSSA);
+   assert(helsingPath[4] == TOULOUSE);
+   assert(helsingPath[5] == MARSEILLES);
+
+   LocationID harkerPath[TRAIL_SIZE];
+   giveMeTheTrail(drac,PLAYER_MINA_HARKER,harkerPath);
+   assert(harkerPath[0] == SARAGOSSA);
+   assert(harkerPath[1] == SANTANDER);
+   assert(harkerPath[2] == MADRID);
+   assert(harkerPath[3] == SARAGOSSA);
+   assert(harkerPath[4] == TOULOUSE);
+   assert(harkerPath[5] == MARSEILLES);
+
+   LocationID draculaPath[TRAIL_SIZE];
+   giveMeTheTrail(drac,PLAYER_DRACULA,draculaPath);
+   assert(draculaPath[0] == CASTLE_DRACULA);
+   assert(draculaPath[1] == KLAUSENBURG);
+   assert(draculaPath[2] == BUDAPEST);
+   assert(draculaPath[3] == KLAUSENBURG);
+   assert(draculaPath[4] == TELEPORT);
+   assert(draculaPath[5] == EDINBURGH);
+
+   disposeDracView(drac);
+
+   puts("===== Testing Long Games ======");
+
+   char testString[LARGE_ENOUGH] = "GJM.... SBI.... HBI.... MBI.... DCD.... ";
+   int i;
+   for(i = 0; i < 300; i++) {
+      strcat(testString, "GJM.... SBI.... HBI.... MBI.... DCD.... ");
+   }
+   strcat(testString, "GJM.... SBI.... HBI.... MBI....");
+
+   drac = newDracView(testString, messagez);
+   assert(howHealthyIs(drac, PLAYER_DRACULA) == 3050);
+   assert(giveMeTheScore(drac) == 65);
+   assert(giveMeTheRound(drac) == 301);
+
+   disposeDracView(drac);
+
 }
 
 void testDracView_given(void)
