@@ -125,6 +125,7 @@ void pushtrap(qlist q, node *newt)
         newt->prev = q->tail;
         q->tail = newt;
     }
+    q->size++;
 }
 
 //remove trap
