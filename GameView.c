@@ -65,7 +65,7 @@ void Dracula(GameView gv, qlist q, char *play)
         if (curloc == TELEPORT || curloc == CASTLE_DRACULA){
             gv->healthPoints[PLAYER_DRACULA] += LIFE_GAIN_CASTLE_DRACULA;
         }else if (curloc == HIDE){
-            curloc = (play[2] - '0' == 1) ? peek(q, 2) : peek(q, 1);
+            curloc = peek(q,(play[2]-'0'+1));
             if (curloc == TELEPORT || curloc == CASTLE_DRACULA)
                 gv->healthPoints[PLAYER_DRACULA] += LIFE_GAIN_CASTLE_DRACULA;
         }else if (curloc != CITY_UNKNOWN && curloc != HIDE && curloc != NOWHERE &&
@@ -189,7 +189,6 @@ int getHealth(GameView currentView, PlayerID player)
 // Get the current location id of a given player
 LocationID getLocation(GameView currentView, PlayerID player)
 {
-    if(getHealth(currentView,player) == 0)return ST_JOSEPH_AND_ST_MARYS;
     return currentView->playerLocations[player][0];
 }
 
